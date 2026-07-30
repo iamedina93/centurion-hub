@@ -99,6 +99,22 @@
   .btn-secondary{background:#fff;color:var(--dark);border:1px solid var(--line);}
   .btn-secondary:hover{background:var(--panel);}
 
+  /* MODO IMPRESIÓN (activado por JS, más confiable que solo @media print) */
+  body.print-mode .bar, body.print-mode .row-del, body.print-mode .add-btn{ display:none !important; }
+  body.print-mode .chip:not(.checked){ display:none !important; }
+  body.print-mode .chip-group{ min-height:1px; }
+  body.print-mode .chip.checked{
+    border:none; background:none; color:var(--orange-dark); box-shadow:none;
+    font-size:19px; font-weight:800; padding:2px 0; letter-spacing:.2px;
+  }
+  body.print-mode .chip-group:empty::after,
+  body.print-mode .chip-group:not(:has(.checked))::after{
+    content:"— Sin especificar —"; color:var(--muted); font-size:13px; font-style:italic;
+  }
+  body.print-mode section:nth-of-type(even){ background:#fff; }
+  body.print-mode .sheet{ box-shadow:none; }
+  body.print-mode td input::placeholder{ color:transparent; }
+
   @media print{
     @page{ size:letter; margin:8mm; }
     body{background:#fff;padding:0;font-size:11px;}
@@ -319,7 +335,13 @@ function calcularTotales(){
 }
 
 document.getElementById('btn-add-row').addEventListener('click', agregarFila);
-document.getElementById('btn-pdf').addEventListener('click', ()=> window.print());
+document.getElementById('btn-pdf').addEventListener('click', ()=>{
+  document.body.classList.add('print-mode');
+  window.print();
+});
+window.addEventListener('afterprint', ()=>{
+  document.body.classList.remove('print-mode');
+});
 
 document.getElementById('btn-limpiar').addEventListener('click', ()=>{
   if(confirm('¿Seguro que quieres limpiar todo el formulario?')){
