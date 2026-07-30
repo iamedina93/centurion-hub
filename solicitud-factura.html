@@ -92,10 +92,12 @@
   }
   .obs-box:focus{outline:none;border-color:var(--orange);box-shadow:0 0 0 3px rgba(236,122,30,.12);}
 
-  .field-extra{margin-top:12px;}
+  .razon-row{display:flex;align-items:center;flex-wrap:wrap;gap:16px;}
+
+  .field-extra{margin-top:0;}
   .field-extra label{display:block;font-size:11.5px;color:var(--muted);margin-bottom:5px;}
   .field-extra input{
-    width:100%;max-width:360px;border:1px solid var(--line);border-radius:6px;padding:9px 12px;
+    width:220px;max-width:100%;border:1px solid var(--line);border-radius:6px;padding:9px 12px;
     font-size:13px;font-family:inherit;background:#fff;
   }
   .field-extra input:focus{outline:none;border-color:var(--orange);box-shadow:0 0 0 3px rgba(236,122,30,.12);}
@@ -124,7 +126,7 @@
   body.print-mode td input::placeholder{ color:transparent; }
 
   @media print{
-    @page{ size:8.5in 6.5in; margin:5mm; }
+    @page{ size:8.5in 11in; margin:10mm; }
     body{background:#fff;padding:0;font-size:9px;}
     .sheet{border:none;max-width:100%;box-shadow:none;}
     .bar, .row-del, .add-btn{display:none !important;}
@@ -200,14 +202,16 @@
   <!-- 2. RAZÓN SOCIAL -->
   <section>
     <div class="section-title"><span class="n">2</span>Razón social</div>
-    <div class="chip-group" data-group="razon">
-      <label class="chip"><input type="radio" name="razon" value="Cliente nuevo">Cliente nuevo</label>
-      <label class="chip"><input type="radio" name="razon" value="Venta de mostrador">Venta de mostrador</label>
-      <label class="chip"><input type="radio" name="razon" value="Cliente registrado">Cliente registrado</label>
-    </div>
-    <div id="nombre-cliente-wrap" class="field-extra" style="display:none;">
-      <label>Nombre del cliente</label>
-      <input type="text" id="nombre-cliente" placeholder="Nombre o razón social">
+    <div class="razon-row">
+      <div class="chip-group" data-group="razon">
+        <label class="chip"><input type="radio" name="razon" value="Cliente nuevo">Cliente nuevo</label>
+        <label class="chip"><input type="radio" name="razon" value="Venta de mostrador">Venta de mostrador</label>
+        <label class="chip"><input type="radio" name="razon" value="Cliente registrado">Cliente registrado</label>
+      </div>
+      <div id="nombre-cliente-wrap" class="field-extra" style="display:none;">
+        <label>Nombre del cliente</label>
+        <input type="text" id="nombre-cliente" placeholder="Nombre o razón social">
+      </div>
     </div>
   </section>
 
