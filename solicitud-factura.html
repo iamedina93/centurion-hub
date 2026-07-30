@@ -110,36 +110,40 @@
     content:"— Sin especificar —"; color:var(--muted); font-size:13px; font-style:italic;
   }
   body.print-mode section:nth-of-type(even){ background:#fff; }
+  body.print-mode section{ break-inside:avoid; page-break-inside:avoid; }
+  body.print-mode .totales{ break-inside:avoid; page-break-inside:avoid; }
   body.print-mode .sheet{ box-shadow:none; }
   body.print-mode td input::placeholder{ color:transparent; }
 
   @media print{
-    @page{ size:8.5in 5.5in; margin:5mm; }
+    @page{ size:8.5in 6.5in; margin:5mm; }
     body{background:#fff;padding:0;font-size:9px;}
     .sheet{border:none;max-width:100%;box-shadow:none;}
     .bar, .row-del, .add-btn{display:none !important;}
+    section{ break-inside:avoid; page-break-inside:avoid; }
+    .totales{ break-inside:avoid; page-break-inside:avoid; }
     section:nth-of-type(even){background:#fff;}
-    .head{padding:4px 16px;}
-    .titles h1{font-size:14px;}
-    .titles .sub{font-size:9px;margin-top:2px;}
-    section{padding:4px 16px;}
-    .section-title{margin-bottom:4px;font-size:10.5px;}
-    .section-title .n{width:16px;height:16px;font-size:9px;}
+    .head{padding:3px 16px;}
+    .titles h1{font-size:13px;}
+    .titles .sub{font-size:8px;margin-top:1px;}
+    section{padding:3px 16px;}
+    .section-title{margin-bottom:2px;font-size:9.5px;}
+    .section-title .n{width:14px;height:14px;font-size:8px;}
     .chip{padding:5px 11px;font-size:11px;box-shadow:none !important;}
     .chip:not(.checked){display:none !important;}
-    .chip.checked{border:none;background:none;color:var(--dark);box-shadow:none;font-size:13px;font-weight:800;padding:1px 0;}
-    .chip-group:not(:has(.checked))::after{content:"— Sin especificar —";color:var(--muted);font-size:10px;font-style:italic;}
-    th{padding:3px 5px;font-size:8px;}
-    td{padding:2px 3px;}
-    td input{padding:1px 3px;font-size:10px;}
+    .chip.checked{border:none;background:none;color:var(--dark);box-shadow:none;font-size:12px;font-weight:800;padding:0;}
+    .chip-group:not(:has(.checked))::after{content:"— Sin especificar —";color:var(--muted);font-size:9px;font-style:italic;}
+    th{padding:2px 5px;font-size:8px;}
+    td{padding:1px 3px;}
+    td input{padding:1px 3px;font-size:9px;}
     td input::placeholder{color:transparent;}
     .costo-bruto, .costo-neto{display:none;}
-    .money-print{display:inline-block;font-weight:700;font-size:10px;}
-    .totales{margin-top:4px;}
-    .totales table{min-width:200px;}
-    .totales td{padding:3px 10px;font-size:11px;}
-    .totales tr.total td{font-size:13px;padding-top:5px;}
-    .obs-box{min-height:22px;padding:4px 6px;font-size:9px;}
+    .money-print{display:inline-block;font-weight:700;font-size:9px;}
+    .totales{margin-top:3px;}
+    .totales table{min-width:190px;}
+    .totales td{padding:2px 10px;font-size:10px;}
+    .totales tr.total td{font-size:12px;padding-top:4px;}
+    .obs-box{min-height:18px;padding:3px 6px;font-size:9px;}
   }
   @media (max-width:640px){
     .head{padding:10px 16px;gap:8px;}
