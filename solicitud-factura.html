@@ -96,7 +96,7 @@
   .money-print{display:none;}
 
   /* MODO IMPRESIÓN (activado por JS, más confiable que solo @media print) */
-  body.print-mode .costo-bruto, body.print-mode .costo-neto{ display:none; }
+  body.print-mode .costo-bruto, body.print-mode .costo-neto, body.print-mode .iva-calc{ display:none; }
   body.print-mode .money-print{ display:inline-block; font-weight:700; }
   body.print-mode .bar, body.print-mode .row-del, body.print-mode .add-btn{ display:none !important; }
   body.print-mode .chip:not(.checked){ display:none !important; }
@@ -137,7 +137,7 @@
     td{padding:1px 3px;}
     td input{padding:1px 3px;font-size:9px;}
     td input::placeholder{color:transparent;}
-    .costo-bruto, .costo-neto{display:none;}
+    .costo-bruto, .costo-neto, .iva-calc{display:none;}
     .money-print{display:inline-block;font-weight:700;font-size:9px;}
     .totales{margin-top:3px;}
     .totales table{min-width:190px;}
@@ -291,7 +291,7 @@ function crearFila(){
     <td data-label="Descripción"><input type="text" class="descripcion" placeholder="Descripción"></td>
     <td class="col-num" data-label="Costo bruto"><input type="number" class="costo-bruto" placeholder="0.00" step="0.01"><span class="money-print"></span></td>
     <td class="col-num" data-label="Costo neto"><input type="number" class="costo-neto" placeholder="0.00" step="0.01"><span class="money-print"></span></td>
-    <td class="col-num" data-label="IVA (16%)"><input type="text" class="iva-calc" readonly placeholder="$0.00"></td>
+    <td class="col-num" data-label="IVA (16%)"><input type="text" class="iva-calc" readonly placeholder="$0.00"><span class="money-print"></span></td>
     <td data-label=""><button type="button" class="row-del" title="Eliminar renglón">✕ Eliminar</button></td>
   `;
   return tr;
@@ -339,7 +339,9 @@ function calcularTotales(){
     const importeNeto = cantVal * netoVal;
     const importeBase = cantVal * brutoVal;
     const importeIva = importeNeto - importeBase;
-    tr.querySelector('.iva-calc').value = netoVal ? fmtMoney(importeIva) : '';
+    const ivaInput = tr.querySelector('.iva-calc');
+    ivaInput.value = netoVal ? fmtMoney(importeIva) : '';
+    ivaInput.parentElement.querySelector('.money-print').textContent = netoVal ? fmtMoney(importeIva) : '';
     brutoInput.parentElement.querySelector('.money-print').textContent = brutoVal ? fmtMoney(brutoVal) : '';
     netoInput.parentElement.querySelector('.money-print').textContent = netoVal ? fmtMoney(netoVal) : '';
     subtotalBase += importeBase;
