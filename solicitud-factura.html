@@ -114,27 +114,32 @@
   body.print-mode td input::placeholder{ color:transparent; }
 
   @media print{
-    @page{ size:8.5in 5.5in; margin:6mm; }
-    body{background:#fff;padding:0;font-size:10px;}
+    @page{ size:8.5in 5.5in; margin:5mm; }
+    body{background:#fff;padding:0;font-size:9px;}
     .sheet{border:none;max-width:100%;box-shadow:none;}
     .bar, .row-del, .add-btn{display:none !important;}
     section:nth-of-type(even){background:#fff;}
-    .head{padding:7px 18px;}
-    .logo-img{height:18px;}
-    section{padding:8px 18px;}
+    .head{padding:4px 16px;}
+    .titles h1{font-size:14px;}
+    .titles .sub{font-size:9px;margin-top:2px;}
+    section{padding:4px 16px;}
+    .section-title{margin-bottom:4px;font-size:10.5px;}
+    .section-title .n{width:16px;height:16px;font-size:9px;}
     .chip{padding:5px 11px;font-size:11px;box-shadow:none !important;}
     .chip:not(.checked){display:none !important;}
-    .chip.checked{border:none;background:none;color:var(--dark);box-shadow:none;font-size:15px;font-weight:800;padding:2px 0;}
-    .chip-group:not(:has(.checked))::after{content:"— Sin especificar —";color:var(--muted);font-size:11px;font-style:italic;}
-    th{padding:4px 6px;font-size:9px;}
-    td{padding:3px 4px;}
-    td input{padding:2px 4px;font-size:11px;}
+    .chip.checked{border:none;background:none;color:var(--dark);box-shadow:none;font-size:13px;font-weight:800;padding:1px 0;}
+    .chip-group:not(:has(.checked))::after{content:"— Sin especificar —";color:var(--muted);font-size:10px;font-style:italic;}
+    th{padding:3px 5px;font-size:8px;}
+    td{padding:2px 3px;}
+    td input{padding:1px 3px;font-size:10px;}
     td input::placeholder{color:transparent;}
     .costo-bruto, .costo-neto{display:none;}
-    .money-print{display:inline-block;font-weight:700;}
-    .totales{margin-top:8px;}
-    .obs-box{min-height:32px;padding:6px 8px;font-size:10px;}
-    section{padding:6px 18px;}
+    .money-print{display:inline-block;font-weight:700;font-size:10px;}
+    .totales{margin-top:4px;}
+    .totales table{min-width:200px;}
+    .totales td{padding:3px 10px;font-size:11px;}
+    .totales tr.total td{font-size:13px;padding-top:5px;}
+    .obs-box{min-height:22px;padding:4px 6px;font-size:9px;}
   }
   @media (max-width:640px){
     .head{padding:10px 16px;gap:8px;}
@@ -344,12 +349,26 @@ function calcularTotales(){
 
 document.getElementById('btn-add-row').addEventListener('click', agregarFila);
 document.getElementById('btn-pdf').addEventListener('click', ()=>{
-  document.body.classList.add('print-mode');
   window.print();
 });
-window.addEventListener('afterprint', ()=>{
+
+function activarModoImpresion(){
+  document.body.classList.add('print-mode');
+  cuerpo.querySelectorAll('tr').forEach(tr=>{
+    const vacio = !tr.querySelector('.cantidad').value.trim()
+      && !tr.querySelector('.medida').value.trim()
+      && !tr.querySelector('.descripcion').value.trim()
+      && !tr.querySelector('.costo-bruto').value.trim()
+      && !tr.querySelector('.costo-neto').value.trim();
+    tr.style.display = vacio ? 'none' : '';
+  });
+}
+function desactivarModoImpresion(){
   document.body.classList.remove('print-mode');
-});
+  cuerpo.querySelectorAll('tr').forEach(tr=>{ tr.style.display = ''; });
+}
+window.addEventListener('beforeprint', activarModoImpresion);
+window.addEventListener('afterprint', desactivarModoImpresion);
 
 document.getElementById('btn-limpiar').addEventListener('click', ()=>{
   if(confirm('¿Seguro que quieres limpiar todo el formulario?')){
