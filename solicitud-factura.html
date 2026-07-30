@@ -92,6 +92,14 @@
   }
   .obs-box:focus{outline:none;border-color:var(--orange);box-shadow:0 0 0 3px rgba(236,122,30,.12);}
 
+  .field-extra{margin-top:12px;}
+  .field-extra label{display:block;font-size:11.5px;color:var(--muted);margin-bottom:5px;}
+  .field-extra input{
+    width:100%;max-width:360px;border:1px solid var(--line);border-radius:6px;padding:9px 12px;
+    font-size:13px;font-family:inherit;background:#fff;
+  }
+  .field-extra input:focus{outline:none;border-color:var(--orange);box-shadow:0 0 0 3px rgba(236,122,30,.12);}
+
   .col-num{position:relative;}
   .money-print{display:none;}
 
@@ -197,6 +205,10 @@
       <label class="chip"><input type="radio" name="razon" value="Venta de mostrador">Venta de mostrador</label>
       <label class="chip"><input type="radio" name="razon" value="Cliente registrado">Cliente registrado</label>
     </div>
+    <div id="nombre-cliente-wrap" class="field-extra" style="display:none;">
+      <label>Nombre del cliente</label>
+      <input type="text" id="nombre-cliente" placeholder="Nombre o razón social">
+    </div>
   </section>
 
   <!-- 3. TABLA -->
@@ -279,6 +291,11 @@ document.querySelectorAll('.chip-group').forEach(group=>{
     if(!label) return;
     group.querySelectorAll('.chip').forEach(c=>c.classList.remove('checked'));
     label.classList.add('checked');
+
+    if(group.dataset.group === 'razon'){
+      const wrap = document.getElementById('nombre-cliente-wrap');
+      wrap.style.display = (label.querySelector('input').value === 'Cliente registrado') ? 'block' : 'none';
+    }
   });
 });
 
@@ -380,6 +397,9 @@ document.getElementById('btn-limpiar').addEventListener('click', ()=>{
   if(confirm('¿Seguro que quieres limpiar todo el formulario?')){
     document.querySelectorAll('.chip').forEach(c=>c.classList.remove('checked'));
     document.querySelectorAll('.chip input').forEach(i=>i.checked=false);
+    document.getElementById('nombre-cliente').value = '';
+    document.getElementById('nombre-cliente-wrap').style.display = 'none';
+    document.getElementById('observaciones').value = '';
     cuerpo.innerHTML = '';
     agregarFila();
     calcularTotales();
