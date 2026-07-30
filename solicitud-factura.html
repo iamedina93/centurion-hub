@@ -99,12 +99,18 @@
   .btn-secondary{background:#fff;color:var(--dark);border:1px solid var(--line);}
   .btn-secondary:hover{background:var(--panel);}
 
+  .obs-box{
+    width:100%;border:1px solid var(--line);border-radius:6px;padding:10px 12px;font-size:13px;
+    font-family:inherit;min-height:60px;resize:vertical;background:#fff;
+  }
+  .obs-box:focus{outline:none;border-color:var(--orange);box-shadow:0 0 0 3px rgba(236,122,30,.12);}
+
   /* MODO IMPRESIÓN (activado por JS, más confiable que solo @media print) */
   body.print-mode .bar, body.print-mode .row-del, body.print-mode .add-btn{ display:none !important; }
   body.print-mode .chip:not(.checked){ display:none !important; }
   body.print-mode .chip-group{ min-height:1px; }
   body.print-mode .chip.checked{
-    border:none; background:none; color:var(--orange-dark); box-shadow:none;
+    border:none; background:none; color:var(--dark); box-shadow:none;
     font-size:19px; font-weight:800; padding:2px 0; letter-spacing:.2px;
   }
   body.print-mode .chip-group:empty::after,
@@ -116,8 +122,8 @@
   body.print-mode td input::placeholder{ color:transparent; }
 
   @media print{
-    @page{ size:letter; margin:8mm; }
-    body{background:#fff;padding:0;font-size:11px;}
+    @page{ size:8.5in 5.5in; margin:6mm; }
+    body{background:#fff;padding:0;font-size:10px;}
     .sheet{border:none;max-width:100%;box-shadow:none;}
     .bar, .row-del, .add-btn{display:none !important;}
     section:nth-of-type(even){background:#fff;}
@@ -126,12 +132,15 @@
     section{padding:8px 18px;}
     .chip{padding:5px 11px;font-size:11px;box-shadow:none !important;}
     .chip:not(.checked){display:none !important;}
+    .chip.checked{border:none;background:none;color:var(--dark);box-shadow:none;font-size:15px;font-weight:800;padding:2px 0;}
     .chip-group:not(:has(.checked))::after{content:"— Sin especificar —";color:var(--muted);font-size:11px;font-style:italic;}
     th{padding:4px 6px;font-size:9px;}
     td{padding:3px 4px;}
     td input{padding:2px 4px;font-size:11px;}
     td input::placeholder{color:transparent;}
     .totales{margin-top:8px;}
+    .obs-box{min-height:32px;padding:6px 8px;font-size:10px;}
+    section{padding:6px 18px;}
   }
   @media (max-width:640px){
     .head{padding:10px 16px;gap:8px;}
@@ -254,6 +263,12 @@
       <label class="chip"><input type="radio" name="metodo-pago" value="PUE">PUE</label>
       <label class="chip"><input type="radio" name="metodo-pago" value="PPD">PPD</label>
     </div>
+  </section>
+
+  <!-- 7. OBSERVACIONES -->
+  <section>
+    <div class="section-title"><span class="n">7</span>Observaciones</div>
+    <textarea id="observaciones" class="obs-box" placeholder="Notas adicionales..."></textarea>
   </section>
 
   <div class="bar">
