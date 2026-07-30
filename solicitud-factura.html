@@ -109,6 +109,22 @@
     .head{padding:10px 16px;gap:8px;}
     .logo-img{height:20px;}
     .folio-box{min-width:100px;}
+
+    table#tabla-productos, table#tabla-productos thead, table#tabla-productos tbody,
+    table#tabla-productos th, table#tabla-productos tr{ display:block; }
+    table#tabla-productos thead{ display:none; }
+    table#tabla-productos tr{
+      border:1px solid var(--line); border-radius:8px; margin-bottom:12px; padding:8px 10px;
+    }
+    table#tabla-productos td{
+      display:flex; justify-content:space-between; align-items:center;
+      border-bottom:1px solid var(--line); padding:8px 2px; gap:10px;
+    }
+    table#tabla-productos td:last-child{ border-bottom:none; padding-top:4px; justify-content:flex-end; }
+    table#tabla-productos td::before{
+      content:attr(data-label); font-size:11px; color:var(--muted); font-weight:600; flex-shrink:0;
+    }
+    table#tabla-productos td input{ text-align:right; max-width:60%; }
   }
 </style>
 </head>
@@ -174,7 +190,7 @@
     </div>
     <div class="totales">
       <table>
-        <tr><td>Subtotal (neto)</td><td id="tot-subtotal">$0.00</td></tr>
+        <tr><td>Subtotal (base)</td><td id="tot-subtotal">$0.00</td></tr>
         <tr><td>IVA (16%)</td><td id="tot-iva">$0.00</td></tr>
         <tr class="total"><td>Total</td><td id="tot-total">$0.00</td></tr>
       </table>
@@ -199,6 +215,7 @@
     <div class="chip-group" data-group="uso-cfdi">
       <label class="chip"><input type="radio" name="uso-cfdi" value="Adquisición de mercancías">Adquisición de mercancías</label>
       <label class="chip"><input type="radio" name="uso-cfdi" value="Gastos en general">Gastos en general</label>
+      <label class="chip"><input type="radio" name="uso-cfdi" value="Sin efectos fiscales">Sin efectos fiscales</label>
     </div>
   </section>
 
@@ -235,10 +252,13 @@ function crearFila(){
     <td class="col-num"><input type="text" class="cantidad" placeholder="1"></td>
     <td><input type="text" class="medida" placeholder="Ej. 295/80R22.5"></td>
     <td><input type="text" class="descripcion" placeholder="Descripción"></td>
-    <td class="col-num"><input type="number" class="costo-bruto" placeholder="0.00" step="0.01"></td>
-    <td class="col-num"><input type="number" class="costo-neto" placeholder="0.00" step="0.01"></td>
-    <td class="col-num"><input type="text" class="iva-calc" readonly placeholder="$0.00"></td>
-    <td><button type="button" class="row-del" title="Eliminar renglón">✕</button></td>
+    <td class="col-num" data-label="Cantidad"><input type="text" class="cantidad" placeholder="1"></td>
+    <td data-label="Medida"><input type="text" class="medida" placeholder="Ej. 295/80R22.5"></td>
+    <td data-label="Descripción"><input type="text" class="descripcion" placeholder="Descripción"></td>
+    <td class="col-num" data-label="Costo bruto"><input type="number" class="costo-bruto" placeholder="0.00" step="0.01"></td>
+    <td class="col-num" data-label="Costo neto"><input type="number" class="costo-neto" placeholder="0.00" step="0.01"></td>
+    <td class="col-num" data-label="IVA (16%)"><input type="text" class="iva-calc" readonly placeholder="$0.00"></td>
+    <td data-label=""><button type="button" class="row-del" title="Eliminar renglón">✕ Eliminar</button></td>
   `;
   return tr;
 }
@@ -254,13 +274,13 @@ function agregarFila(){
 
   bruto.addEventListener('input', ()=>{
     const v = parseFloat(bruto.value);
-    if(!isNaN(v)) neto.value = (v/1.16).toFixed(2);
+    if(!isNaN(v)) neto.value = (v*1.16).toFixed(2);
     else neto.value = '';
     calcularTotales();
   });
   neto.addEventListener('input', ()=>{
     const v = parseFloat(neto.value);
-    if(!isNaN(v)) bruto.value = (v*1.16).toFixed(2);
+    if(!isNaN(v)) bruto.value = (v/1.16).toFixed(2);
     else bruto.value = '';
     calcularTotales();
   });
@@ -269,22 +289,24 @@ function agregarFila(){
 }
 
 function calcularTotales(){
-  let subtotalNeto = 0;
+  let subtotalBase = 0;
   let ivaAcum = 0;
+  let totalPagado = 0;
   cuerpo.querySelectorAll('tr').forEach(tr=>{
     const cantVal = parseFloat(tr.querySelector('.cantidad').value) || 1;
     const netoVal = parseFloat(tr.querySelector('.costo-neto').value) || 0;
     const brutoVal = parseFloat(tr.querySelector('.costo-bruto').value) || 0;
     const importeNeto = cantVal * netoVal;
-    const importeIva = (cantVal * brutoVal) - importeNeto;
-    tr.querySelector('.iva-calc').value = brutoVal ? ('$' + importeIva.toLocaleString('es-MX',{minimumFractionDigits:2,maximumFractionDigits:2})) : '';
-    subtotalNeto += importeNeto;
+    const importeBase = cantVal * brutoVal;
+    const importeIva = importeNeto - importeBase;
+    tr.querySelector('.iva-calc').value = netoVal ? ('$' + importeIva.toLocaleString('es-MX',{minimumFractionDigits:2,maximumFractionDigits:2})) : '';
+    subtotalBase += importeBase;
     ivaAcum += importeIva;
+    totalPagado += importeNeto;
   });
-  const total = subtotalNeto + ivaAcum;
-  document.getElementById('tot-subtotal').textContent = '$' + subtotalNeto.toLocaleString('es-MX',{minimumFractionDigits:2,maximumFractionDigits:2});
+  document.getElementById('tot-subtotal').textContent = '$' + subtotalBase.toLocaleString('es-MX',{minimumFractionDigits:2,maximumFractionDigits:2});
   document.getElementById('tot-iva').textContent = '$' + ivaAcum.toLocaleString('es-MX',{minimumFractionDigits:2,maximumFractionDigits:2});
-  document.getElementById('tot-total').textContent = '$' + total.toLocaleString('es-MX',{minimumFractionDigits:2,maximumFractionDigits:2});
+  document.getElementById('tot-total').textContent = '$' + totalPagado.toLocaleString('es-MX',{minimumFractionDigits:2,maximumFractionDigits:2});
 }
 
 document.getElementById('btn-add-row').addEventListener('click', agregarFila);
