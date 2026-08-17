@@ -141,6 +141,34 @@ input[type='radio'],input[type='checkbox']{accent-color:#f47b20}
 .signature-actions button{border:1px solid #bbb;border-radius:5px;background:#fff;padding:4px 8px;cursor:pointer}
 @media(max-width:700px){.signature-box canvas{height:125px}}
 @media print{.signature-box{border:1px solid #555}.signature-box canvas{height:22mm}.signature-actions{display:none!important}}
+
+/* Impresión en dos hojas: captura y firmas en la primera; evidencia en la segunda */
+@media print{
+  .page-two{break-before:auto!important;page-break-before:auto!important;padding-top:4px;padding-bottom:3px}
+  .conformity-section{break-before:auto!important;page-break-before:auto!important;min-height:0!important;padding:3px 12px 5px!important;display:block!important;background:#fff!important}
+  .conformity-section::before,.conformity-section::after{display:none!important}
+  .conformity-section .title{margin:3px 0 4px!important;padding-bottom:3px!important}
+  .conformity-section .legal{gap:5px!important;font-size:6px!important;line-height:1.3!important}
+  .conformity-section .legal p{padding:4px!important}
+  .conformity-section .confirm{margin:4px 0!important;padding:4px!important;font-size:6.2px!important;line-height:1.3!important}
+  .conformity-section .tire-disposal{padding:4px!important}
+  .conformity-section .tire-disposal .choices{gap:4px!important;margin:2px 0 3px!important}
+  .conformity-section .tire-disposal .choices label{padding:4px!important;font-size:6px!important}
+  .conformity-section .tire-disposal .note{padding:3px!important;font-size:5.8px!important;line-height:1.25!important}
+  .conformity-section>.choices{margin:4px 0!important;padding:4px!important}
+  .conformity-section>.choices label{font-size:6.3px!important}
+  .conformity-section .signs{margin-top:4px!important;gap:5px 8px!important}
+  .conformity-section .signs>div{padding:4px!important}
+  .conformity-section .signs>div:last-child{gap:8px!important}
+  .conformity-section .signature-box canvas{height:13mm!important}
+  .conformity-section .signature-line,.conformity-section .line{margin-top:2px!important;padding-top:2px!important;font-size:5.8px!important}
+  .conformity-section .delivery-fields{margin-top:0!important}
+  .evidence-section{break-before:page!important;page-break-before:always!important;min-height:245mm!important;padding-top:8px!important}
+  .evidence-section .photo-grid{grid-template-columns:repeat(2,1fr)!important;gap:5px!important}
+  .evidence-section .photo img{max-height:48mm!important}
+  .evidence-section textarea{min-height:25px!important}
+  .evidence-section+footer{break-inside:avoid!important}
+}
 </style>
 </head>
 <body>
@@ -155,14 +183,14 @@ input[type='radio'],input[type='checkbox']{accent-color:#f47b20}
 <fieldset><legend>Válvula</legend><div class="choices" data-radio="valvula"></div></fieldset><fieldset><legend>Balanceo</legend><div class="choices" data-radio="balanceo"></div></fieldset>
 <fieldset><legend>Tuercas / birlos</legend><div class="birlos"><label><span>Encontrados</span><input name="birlos_encontrados" type="number" min="0"></label><label><span>Faltantes</span><input name="birlos_faltantes" type="number" min="0"></label><label><span>Dañados</span><input name="birlos_danados" type="number" min="0"></label></div></fieldset>
 <fieldset><legend>Condición visible del rin</legend><div class="choices" data-check="rin"></div></fieldset>
-<fieldset class="warning"><legend>Testigos encendidos al recibir el vehículo</legend><p class="note">Marque los visibles antes de iniciar el servicio y agregue una fotografía como evidencia.</p><div class="choices" data-check="testigos"></div><label style="margin-top:8px"><span>Otro testigo / descripción</span><input name="otro_testigo"></label></fieldset></div>
-<fieldset class="photos"><legend>Evidencia fotográfica</legend><label class="upload no-print"><input id="files" type="file" accept="image/*" multiple><b>＋ Agregar fotografías</b><br><small>Hasta 8 imágenes; se incluirán al imprimir.</small></label><div class="photo-grid" id="photos"></div></fieldset>
-<label style="display:block;margin-top:10px"><span>Observaciones o daños detectados</span><textarea name="observaciones"></textarea></label></section>
+<fieldset class="warning"><legend>Testigos encendidos al recibir el vehículo</legend><p class="note">Marque los visibles antes de iniciar el servicio y agregue una fotografía como evidencia.</p><div class="choices" data-check="testigos"></div><label style="margin-top:8px"><span>Otro testigo / descripción</span><input name="otro_testigo"></label></fieldset></div></section>
 <section class="section conformity-section"><div class="title"><b>04</b><h2>Conformidad y entrega</h2></div><div class="legal"><p><b>Recepción.</b> El cliente u operador confirma que los datos y condiciones visibles registrados al ingreso son correctos y autoriza los servicios señalados.</p><p><b>Entrega.</b> Recibo la unidad con los servicios indicados como terminados. Se me informó la presión aplicada y las condiciones visibles de llantas y rines. Entiendo que cualquier reclamación será sometida a inspección técnica y a las condiciones del fabricante; recibir una llanta dañada no implica la aceptación automática de una garantía.</p></div>
 <label class="confirm"><input type="checkbox" name="llantas_mostradas"><span><b>Confirmación de condición de las llantas:</b> Antes de la instalación se me mostraron físicamente las llantas y confirmé que su condición —nueva, usada o renovada— coincide con la sección 02.</span></label>
 <fieldset class="tire-disposal"><legend>Destino de las llantas retiradas</legend><div class="choices"><label><input type="radio" name="destino_llantas" value="Entregadas al cliente"> Entregadas al cliente / operador</label><label><input type="radio" name="destino_llantas" value="Destrucción responsable"> Autorizo su inutilización y disposición, reciclaje o destrucción responsable</label><label><input type="radio" name="destino_llantas" value="No aplica"> No aplica</label></div><p class="note"><b>Autorización:</b> Cuando se elige la disposición responsable, autorizo a Centurion Llantas a inutilizar y canalizar las llantas retiradas con un gestor o proceso autorizado. Entiendo que, una vez destruidas o entregadas para su disposición, no podrán ser devueltas.</p></fieldset>
 <div class="choices"><label><input type="checkbox" name="recepcion_ok"> Confirmo recepción y autorización</label><label><input type="checkbox" name="entrega_ok"> Confirmo entrega de conformidad</label></div>
 <div class="signs" style="margin-top:14px"><div><label><span>Nombre del técnico</span><input name="tecnico"></label><div class="signature-box"><canvas id="firma_tecnico" aria-label="Firma digital del técnico"></canvas><div class="signature-actions no-print"><span>Firme con el dedo o el mouse</span><button type="button" onclick="clearSignature('firma_tecnico')">Borrar firma</button></div></div><div class="line" style="margin-top:4px">Firma del técnico</div></div><div><label><span>Cliente / operador que recibe</span><input name="recibe"></label><div class="signature-box"><canvas id="firma_cliente" aria-label="Firma digital del cliente u operador"></canvas><div class="signature-actions no-print"><span>Firme con el dedo o el mouse</span><button type="button" onclick="clearSignature('firma_cliente')">Borrar firma</button></div></div><div class="line" style="margin-top:4px">Firma del cliente u operador</div></div><div class="grid" style="grid-template-columns:1fr 1fr"><label><span>Fecha de entrega</span><input name="fecha_entrega" type="date"></label><label><span>Hora</span><input name="hora_entrega" type="time"></label></div></div></section>
+<section class="section evidence-section"><div class="title"><b>05</b><h2>Evidencia fotográfica</h2></div><fieldset class="photos"><legend>Fotografías del vehículo y las llantas</legend><label class="upload no-print"><input id="files" type="file" accept="image/*" multiple><b>＋ Agregar fotografías</b><br><small>Hasta 8 imágenes; se incluirán al imprimir.</small></label><div class="photo-grid" id="photos"></div></fieldset>
+<label style="display:block;margin-top:10px"><span>Observaciones o daños detectados</span><textarea name="observaciones"></textarea></label></section>
 <footer><b>CENTURION LLANTAS</b><span>Conserve este documento junto con su factura y póliza de garantía.</span></footer>
 </form>
 <script>
@@ -180,3 +208,4 @@ function clearSignature(id){const p=signaturePads[id];p.ctx.clearRect(0,0,p.canv
 function restoreSignature(id,src){const p=signaturePads[id];if(!p||!src)return;const img=new Image();img.onload=()=>{p.ctx.clearRect(0,0,p.canvas.width,p.canvas.height);p.ctx.drawImage(img,0,0,p.canvas.clientWidth,p.canvas.clientHeight);p.signed=true};img.src=src}
 let photoCount=0;document.querySelector('#files').addEventListener('change',e=>{[...e.target.files].filter(f=>f.type.startsWith('image/')).slice(0,8-photoCount).forEach(f=>{let d=document.createElement('div');d.className='photo';let u=URL.createObjectURL(f);d.innerHTML=`<img src="${u}" alt="Evidencia"><button type="button" class="no-print">×</button>`;d.querySelector('button').onclick=()=>{URL.revokeObjectURL(u);d.remove();photoCount--};document.querySelector('#photos').appendChild(d);photoCount++});e.target.value=''});setupSignature('firma_tecnico');setupSignature('firma_cliente');load();
 </script></body></html>
+
