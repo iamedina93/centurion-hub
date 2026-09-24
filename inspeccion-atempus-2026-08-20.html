@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Inspección de llantas · ATEMPUS · 20/08/2026</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700&family=Barlow:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#EEF0F3; --panel:#FFFFFF; --ink:#15171C; --muted:#5E6570; --line:#D9DDE3;
+  --ok:#1E9B69; --ok-soft:#DDF3EA; --warn:#E3861F; --warn-soft:#FCEBD7;
+  --bad:#D2433A; --bad-soft:#F9DEDC; --rubber:#2A2D33; --chassis:#B8BEC7;
+  --head:#000000; --head-ink:#FFFFFF;
+  box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px); padding-bottom:env(safe-area-inset-bottom,0px);
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --bg:#121418; --panel:#1B1E24; --ink:#ECEEF1; --muted:#9AA1AC; --line:#2C3038;
+    --ok-soft:#173529; --warn-soft:#3A2A16; --bad-soft:#3A1C1A; --rubber:#0B0C0E; --chassis:#454B55;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#121418; --panel:#1B1E24; --ink:#ECEEF1; --muted:#9AA1AC; --line:#2C3038;
+  --ok-soft:#173529; --warn-soft:#3A2A16; --bad-soft:#3A1C1A; --rubber:#0B0C0E; --chassis:#454B55;
+}
+*,*::before,*::after{box-sizing:inherit}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;background:var(--bg);color:var(--ink);font:400 16px/1.5 "Barlow",system-ui,-apple-system,"Segoe UI",sans-serif}
+h1,h2,h3,.cond{font-family:"Barlow Condensed","Arial Narrow",system-ui,sans-serif}
+.wrap{max-width:980px;margin:0 auto;padding:0 20px}
+
+header.top{background:var(--head);color:var(--head-ink)}
+header.top .wrap{display:flex;align-items:center;justify-content:space-between;gap:16px;padding-top:14px;padding-bottom:14px;flex-wrap:wrap}
+.brand{font:700 1.5rem/1 "Barlow Condensed",sans-serif;letter-spacing:.14em;font-style:italic}
+.meta{display:flex;gap:22px;flex-wrap:wrap;font-size:.9rem;color:#C9CDD3}
+.meta b{color:#fff;font-weight:600}
+
+.hero{padding:34px 0 10px}
+.hero h1{font-size:clamp(2rem,5.2vw,3.3rem);line-height:1.02;margin:0 0 10px;font-weight:700;max-width:22ch}
+.hero p{margin:0;color:var(--muted);max-width:62ch}
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--line);border:1px solid var(--line);border-radius:10px;overflow:hidden;margin:24px 0 8px}
+.stat{background:var(--panel);padding:14px 16px}
+.stat .n{font:700 2.2rem/1 "Barlow Condensed",sans-serif}
+.stat .l{font-size:.88rem;color:var(--muted)}
+.stat.warn .n{color:var(--warn)} .stat.ok .n{color:var(--ok)}
+
+section{margin:34px 0}
+.sechead{display:flex;align-items:end;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-bottom:14px}
+h2{font-size:1.7rem;margin:0;font-weight:600}
+.legend{display:flex;gap:14px;font-size:.85rem;color:var(--muted);flex-wrap:wrap}
+.legend i{display:inline-block;width:11px;height:11px;border-radius:3px;margin-right:6px;vertical-align:-1px}
+.toggle{display:inline-flex;border:1px solid var(--line);border-radius:999px;overflow:hidden;background:var(--panel)}
+.toggle button{border:0;background:none;color:var(--muted);font:500 .9rem "Barlow",sans-serif;padding:7px 14px;cursor:pointer}
+.toggle button[aria-pressed="true"]{background:var(--ink);color:var(--bg)}
+
+.units{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.unit{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:16px;display:flex;flex-direction:column;transition:opacity .25s}
+.unit.flag{border-color:var(--warn);box-shadow:inset 4px 0 0 var(--warn)}
+.unit.dim{opacity:.28}
+.unit h3{margin:0;font-size:1.9rem;line-height:1;font-weight:700}
+.unit .plate{font-size:.9rem;color:var(--muted)}
+.unit .model{font-weight:600;margin-top:2px}
+.badge{display:inline-block;font-size:.78rem;font-weight:600;padding:3px 9px;border-radius:999px;margin-top:8px;align-self:flex-start}
+.badge.ok{background:var(--ok-soft);color:var(--ok)} .badge.warn{background:var(--warn-soft);color:var(--warn)}
+.truck{display:block;width:100%;max-width:190px;margin:14px auto 6px}
+.truck .tire{cursor:pointer;stroke:var(--panel);stroke-width:2;transition:transform .15s}
+.truck .tire:hover,.truck .tire:focus{outline:none;stroke:var(--ink)}
+.truck .tire.sel{stroke:var(--ink);stroke-width:3}
+.truck text{font:600 11px "Barlow",sans-serif;fill:#fff;pointer-events:none}
+.detail{margin-top:auto;border-top:1px solid var(--line);padding-top:10px;min-height:66px;font-size:.92rem}
+.detail .d1{font-weight:600}
+.detail .d2{color:var(--muted)}
+.odo{font-size:.85rem;color:var(--muted);text-align:center;margin-bottom:6px}
+
+.two{display:grid;grid-template-columns:1.4fr 1fr;gap:16px}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:18px}
+.card h3{margin:0 0 12px;font-size:1.3rem;font-weight:600}
+.hist{display:flex;align-items:flex-end;gap:8px;height:150px;padding-bottom:4px;border-bottom:1px solid var(--line)}
+.hist .col{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;height:100%}
+.hist .bar{width:100%;max-width:38px;border-radius:5px 5px 0 0;height:0;transition:height .7s cubic-bezier(.2,.8,.2,1)}
+.hist .v{font:600 .9rem "Barlow Condensed",sans-serif;margin-bottom:3px}
+.hist-x{display:flex;gap:8px;font-size:.8rem;color:var(--muted);margin-top:4px}
+.hist-x span{flex:1;text-align:center}
+.note{font-size:.85rem;color:var(--muted);margin:10px 0 0}
+.brandbar{display:flex;height:34px;border-radius:7px;overflow:hidden;margin-bottom:12px}
+.brandbar div{display:flex;align-items:center;justify-content:center;color:#fff;font:600 .9rem "Barlow Condensed",sans-serif}
+.brandlist{list-style:none;margin:0;padding:0;font-size:.95rem}
+.brandlist li{display:flex;justify-content:space-between;padding:5px 0;border-bottom:1px solid var(--line)}
+.brandlist li:last-child{border:0}
+.brandlist i{display:inline-block;width:10px;height:10px;border-radius:2px;margin-right:8px}
+
+.action{background:var(--ink);color:var(--bg);border-radius:12px;padding:20px 22px;display:grid;grid-template-columns:auto 1fr;gap:18px;align-items:center}
+.action .big{font:700 3rem/1 "Barlow Condensed",sans-serif;color:var(--warn)}
+.action h3{margin:0 0 4px;font-size:1.4rem;font-weight:600}
+.action p{margin:0;opacity:.8;font-size:.95rem}
+
+footer{padding:26px 0 36px;font-size:.85rem;color:var(--muted);text-align:center}
+button:focus-visible,.tire:focus-visible{outline:2px solid var(--warn);outline-offset:2px}
+
+@media (max-width:820px){.units{grid-template-columns:1fr}.two{grid-template-columns:1fr}.stats{grid-template-columns:repeat(2,1fr)}}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+@media print{
+  body{background:#fff}.toggle{display:none}.unit.dim{opacity:1}
+  .units{grid-template-columns:repeat(3,1fr)}.two{grid-template-columns:1.4fr 1fr}
+  header.top,.action{-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  section{break-inside:avoid}
+}
+</style>
+</head>
+<body>
+<header class="top">
+  <div class="wrap">
+    <div class="brand">CENTURION</div>
+    <div class="meta">
+      <span>Cliente <b>ATEMPUS</b></span>
+      <span>Agente <b>Luis Medina</b></span>
+      <span>Inspección <b>20/08/2026</b></span>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+  <div class="hero">
+    <h1>Flota en buen estado, con un eje por atender</h1>
+    <p>Las 18 llantas tienen presión correcta y ninguna está en punto de retiro. La unidad 21 trae 4 llantas traseras con desgaste avanzado (4–5 mm).</p>
+    <div class="stats">
+      <div class="stat"><div class="n" data-count="18">0</div><div class="l">Llantas revisadas</div></div>
+      <div class="stat"><div class="n" data-count="3">0</div><div class="l">Unidades</div></div>
+      <div class="stat ok"><div class="n" data-count="100" data-suffix="%">0</div><div class="l">Presión correcta</div></div>
+      <div class="stat warn"><div class="n" data-count="4">0</div><div class="l">Llantas en advertencia</div></div>
+    </div>
+  </div>
+
+  <section>
+    <div class="sechead">
+      <h2>Unidades</h2>
+      <div class="toggle" role="group" aria-label="Filtrar unidades">
+        <button type="button" aria-pressed="true" data-f="all">Todas</button>
+        <button type="button" aria-pressed="false" data-f="flag">Con advertencia</button>
+      </div>
+    </div>
+    <div class="legend" style="margin-bottom:12px">
+      <span><i style="background:var(--ok)"></i>7 mm o más</span>
+      <span><i style="background:var(--warn)"></i>4 a 6 mm</span>
+      <span><i style="background:var(--bad)"></i>3 mm o menos</span>
+      <span>Toca una llanta para ver su detalle</span>
+    </div>
+    <div class="units" id="units"></div>
+  </section>
+
+  <section class="two">
+    <div class="card">
+      <h3>Profundidad de piso</h3>
+      <div class="hist" id="hist"></div>
+      <div class="hist-x" id="histx"></div>
+      <p class="note">Número de llantas por milímetros de piso restante.</p>
+    </div>
+    <div class="card">
+      <h3>Marcas · 11R22.5</h3>
+      <div class="brandbar" id="bbar"></div>
+      <ul class="brandlist" id="blist"></ul>
+    </div>
+  </section>
+
+  <section>
+    <div class="action">
+      <div class="big">21</div>
+      <div>
+        <h3>Programar cambio del eje trasero</h3>
+        <p>Posiciones 3 y 4 (Armstrong, 4 mm) y 5 y 6 (Lander, 5 mm). Sin servicios urgentes en las unidades 22 y 35.</p>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>Centurion Llantas · Reporte de inspección de llantas · Enviado el 20/08/2026</footer>
+
+<script>
+const units=[
+  {id:"22",plate:"01AS7F",model:"Hino 500 Rabón",odo:"448,206",tires:[
+    {p:1,b:"Lander",mm:11},{p:2,b:"Lander",mm:11},{p:3,b:"Ovation",mm:10},{p:4,b:"Ovation",mm:10},{p:5,b:"Ovation",mm:10},{p:6,b:"Ovation",mm:10}]},
+  {id:"35",plate:"71AZ5V",model:"Freightliner M2 Rabón",odo:"428,097",tires:[
+    {p:1,b:"Lander",mm:10},{p:2,b:"Lander",mm:10},{p:3,b:"Lander",mm:8},{p:4,b:"Lander",mm:8},{p:5,b:"Lander",mm:8},{p:6,b:"Lander",mm:8}]},
+  {id:"21",plate:"34BC7B",model:"Hino 500 Rabón",odo:"515,830",tires:[
+    {p:1,b:"Lander",mm:9},{p:2,b:"Lander",mm:9},{p:3,b:"Armstrong",mm:4},{p:4,b:"Armstrong",mm:4},{p:5,b:"Lander",mm:5},{p:6,b:"Lander",mm:5}]}
+];
+const PSI=105;
+const lvl=mm=>mm<=3?"bad":mm<=6?"warn":"ok";
+const col=l=>`var(--${l})`;
+const posName={1:"Delantera izquierda",2:"Delantera derecha",3:"Trasera izq. exterior",4:"Trasera izq. interior",5:"Trasera der. interior",6:"Trasera der. exterior"};
+
+// Vista superior: eje delantero (1,2) y eje trasero dual (3,4 | 5,6)
+const pos={1:[18,34],2:[142,34],3:[6,178],4:[34,178],5:[126,178],6:[154,178]};
+function truckSVG(u){
+  let t=u.tires.map(x=>{const [cx,cy]=pos[x.p];
+    return `<rect class="tire" tabindex="0" role="button" aria-label="Posición ${x.p}, ${x.b}, ${x.mm} mm" data-u="${u.id}" data-p="${x.p}" x="${cx}" y="${cy}" width="26" height="52" rx="7" fill="${col(lvl(x.mm))}"/><text x="${cx+13}" y="${cy+30}" text-anchor="middle">${x.p}</text>`}).join("");
+  return `<svg class="truck" viewBox="0 0 186 250" aria-hidden="false">
+    <rect x="58" y="6" width="70" height="56" rx="10" fill="var(--chassis)"/>
+    <rect x="80" y="62" width="26" height="170" rx="4" fill="var(--chassis)"/>
+    <rect x="44" y="56" width="98" height="8" rx="4" fill="var(--rubber)"/>
+    <rect x="30" y="200" width="126" height="8" rx="4" fill="var(--rubber)"/>
+    ${t}</svg>`;
+}
+const box=document.getElementById("units");
+units.forEach(u=>{
+  const flag=u.tires.some(t=>lvl(t.mm)!=="ok");
+  const n=u.tires.filter(t=>lvl(t.mm)!=="ok").length;
+  const el=document.createElement("article");
+  el.className="unit"+(flag?" flag":"");el.dataset.flag=flag;
+  el.innerHTML=`<h3>Unidad ${u.id}</h3><div class="plate">Placa ${u.plate}</div><div class="model">${u.model}</div>
+    <span class="badge ${flag?"warn":"ok"}">${flag?n+" llantas con desgaste avanzado":"Todo en orden"}</span>
+    ${truckSVG(u)}<div class="odo">${u.odo} km</div>
+    <div class="detail" id="d${u.id}"><div class="d2">Selecciona una llanta.</div></div>`;
+  box.appendChild(el);
+});
+function show(uid,p){
+  const u=units.find(x=>x.id===uid),t=u.tires.find(x=>x.p==p),l=lvl(t.mm);
+  document.querySelectorAll(`.tire[data-u="${uid}"]`).forEach(r=>r.classList.toggle("sel",r.dataset.p==p));
+  const txt={ok:"Buen estado",warn:"Desgaste avanzado, vigilar",bad:"Cambio necesario"}[l];
+  document.getElementById("d"+uid).innerHTML=`<div class="d1">Posición ${p} · ${posName[p]}</div>
+    <div class="d2">${t.b} 11R22.5 · ${t.mm} mm · ${PSI} PSI</div><div style="color:${col(l)};font-weight:600">${txt}</div>`;
+}
+box.addEventListener("click",e=>{const r=e.target.closest(".tire");if(r)show(r.dataset.u,r.dataset.p)});
+box.addEventListener("keydown",e=>{const r=e.target.closest(".tire");if(r&&(e.key==="Enter"||e.key===" ")){e.preventDefault();show(r.dataset.u,r.dataset.p)}});
+// Preselecciona la llanta más gastada de cada unidad
+units.forEach(u=>{const w=u.tires.reduce((a,b)=>b.mm<a.mm?b:a);show(u.id,w.p)});
+
+document.querySelectorAll(".toggle button").forEach(b=>b.addEventListener("click",()=>{
+  document.querySelectorAll(".toggle button").forEach(x=>x.setAttribute("aria-pressed",x===b));
+  document.querySelectorAll(".unit").forEach(u=>u.classList.toggle("dim",b.dataset.f==="flag"&&u.dataset.flag!=="true"));
+}));
+
+// Histograma de profundidad
+const all=units.flatMap(u=>u.tires);
+const range=[];for(let i=3;i<=12;i++)range.push(i);
+const max=Math.max(...range.map(m=>all.filter(t=>t.mm===m).length));
+const hist=document.getElementById("hist"),hx=document.getElementById("histx");
+range.forEach(m=>{const c=all.filter(t=>t.mm===m).length;
+  hist.insertAdjacentHTML("beforeend",`<div class="col"><span class="v">${c||""}</span><div class="bar" data-h="${c/max*100}" style="background:${col(lvl(m))}"></div></div>`);
+  hx.insertAdjacentHTML("beforeend",`<span>${m}</span>`);
+});
+
+// Marcas
+const brands=[["Lander","#1A1D22"],["Ovation","#5B6573"],["Armstrong","#9AA3AF"]];
+const bb=document.getElementById("bbar"),bl=document.getElementById("blist");
+brands.forEach(([b,c])=>{const n=all.filter(t=>t.b===b).length,pct=Math.round(n/all.length*100);
+  bb.insertAdjacentHTML("beforeend",`<div style="width:${pct}%;background:${c}">${pct}%</div>`);
+  bl.insertAdjacentHTML("beforeend",`<li><span><i style="background:${c}"></i>${b}</span><span>${n} llantas</span></li>`);
+});
+
+// Única animación de entrada: contadores + barras
+const reduce=matchMedia("(prefers-reduced-motion: reduce)").matches;
+requestAnimationFrame(()=>{
+  document.querySelectorAll(".bar").forEach(b=>b.style.height=b.dataset.h+"%");
+  document.querySelectorAll("[data-count]").forEach(el=>{
+    const end=+el.dataset.count,suf=el.dataset.suffix||"";
+    if(reduce){el.textContent=end+suf;return}
+    const t0=performance.now();
+    const step=t=>{const k=Math.min((t-t0)/700,1);el.textContent=Math.round(end*(1-Math.pow(1-k,3)))+suf;if(k<1)requestAnimationFrame(step)};
+    requestAnimationFrame(step);
+  });
+});
+</script>
+</body>
+</html>
