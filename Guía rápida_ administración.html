@@ -1,0 +1,766 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Guía rápida: administración</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600&family=Barlow+Condensed:wght@600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px);
+  padding-bottom:env(safe-area-inset-bottom,0px);
+  --bg:#F5F6F7; --surface:#FFFFFF; --ink:#1E2227; --ink-2:#5B636B; --line:#DDE0E3;
+  --brand:#E8590C; --brand-ink:#B8420A; --done:#1F8A5B; --bar:#1E2227; --bar-ink:#F5F6F7; --tread-off:#D5D9DD; --btn-bg:#C24A07; --btn-ink:#FFFFFF; --alert:#B3261E;
+  --sans:"Barlow","Segoe UI",system-ui,-apple-system,Roboto,Arial,sans-serif;
+  --cond:"Barlow Condensed","Arial Narrow","Roboto Condensed",Arial,sans-serif;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#15181B; --surface:#1E2227; --ink:#ECEEF0; --ink-2:#9AA3AB; --line:#333A41;
+    --brand:#FF7A33; --brand-ink:#FF9455; --done:#3DBE86; --bar:#0E1113; --bar-ink:#ECEEF0; --tread-off:#333A41; --btn-bg:#FF7A33; --btn-ink:#1A1D20; --alert:#FF8A80;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#15181B; --surface:#1E2227; --ink:#ECEEF0; --ink-2:#9AA3AB; --line:#333A41;
+  --brand:#FF7A33; --brand-ink:#FF9455; --done:#3DBE86; --bar:#0E1113; --bar-ink:#ECEEF0; --tread-off:#333A41; --btn-bg:#FF7A33; --btn-ink:#1A1D20; --alert:#FF8A80;
+}
+*,*::before,*::after{box-sizing:inherit}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;background:var(--bg);color:var(--ink);font:400 17px/1.45 var(--sans);-webkit-text-size-adjust:100%}
+.wrap{max-width:720px;margin:0 auto;padding:20px 18px 48px}
+h1{font:700 32px/1.05 var(--cond);letter-spacing:.2px;margin:0 0 4px}
+h2{font:700 24px/1.1 var(--cond);margin:0 0 10px}
+h3{font:600 17px/1.3 var(--sans);margin:0}
+p{margin:0}
+.today{color:var(--ink-2);font-size:16px}
+.today b{color:var(--ink);font-weight:600}
+
+.rule{margin:16px 0 4px;background:var(--bar);color:var(--bar-ink);border-left:6px solid var(--brand);padding:12px 14px;border-radius:0 8px 8px 0;font-size:16px}
+.rule strong{font:700 21px/1.1 var(--cond);display:block;margin-bottom:2px}
+.rule .prio{display:block;margin-top:8px;padding-top:8px;border-top:1px solid rgba(255,255,255,.18)}
+
+.tabs{display:flex;gap:2px;overflow-x:auto;position:sticky;top:env(safe-area-inset-top,0px);background:var(--bg);padding:10px 0 0;margin-top:8px;border-bottom:1px solid var(--line);z-index:5;scrollbar-width:none}
+.tabs::-webkit-scrollbar{display:none}
+.tab{appearance:none;background:none;border:0;border-bottom:3px solid transparent;color:var(--ink-2);font:600 16px/1 var(--sans);padding:12px 14px;cursor:pointer;white-space:nowrap}
+.tab[aria-selected="true"]{color:var(--ink);border-bottom-color:var(--brand)}
+.tab:focus-visible,.reset:focus-visible,summary:focus-visible{outline:3px solid var(--brand);outline-offset:2px;border-radius:4px}
+.panel{padding-top:22px}
+.panel[hidden]{display:none}
+
+.progress{margin-bottom:6px}
+.progress .count{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:8px}
+.progress .count b{font:700 34px/1 var(--cond)}
+.progress .count span{color:var(--ink-2);font-size:15px}
+.tread{display:grid;grid-template-columns:repeat(24,1fr);gap:3px;height:26px}
+.tread i{background:var(--tread-off);border-radius:2px;transform:skewX(-14deg);transition:background .25s}
+.tread i.on{background:var(--brand)}
+.tread.full i.on{background:var(--done)}
+
+.group{margin-top:26px}
+.group header{display:flex;justify-content:space-between;align-items:baseline;border-bottom:2px solid var(--ink);padding-bottom:6px;margin-bottom:2px}
+.group header h2{margin:0}
+.group header small{color:var(--ink-2);font-size:15px}
+.group .note{color:var(--ink-2);font-size:15px;margin:6px 0 2px}
+.item{display:flex;gap:14px;align-items:flex-start;padding:13px 0;border-bottom:1px solid var(--line);cursor:pointer;position:relative}
+.item input{position:absolute;opacity:0;width:26px;height:26px;margin:0;cursor:pointer}
+.box{flex:none;width:26px;height:26px;border:2px solid var(--ink-2);border-radius:6px;display:grid;place-items:center;background:var(--surface);margin-top:1px}
+.box svg{width:16px;height:16px;stroke:#fff;stroke-width:3.2;fill:none;stroke-linecap:round;stroke-linejoin:round;opacity:0}
+.item input:checked + .box{background:var(--done);border-color:var(--done)}
+.item input:checked + .box svg{opacity:1}
+.item input:focus-visible + .box{outline:3px solid var(--brand);outline-offset:2px}
+.item span.t{flex:1}
+.item input:checked ~ .t{color:var(--ink-2);text-decoration:line-through;text-decoration-thickness:1px}
+.item .hint{display:block;color:var(--ink-2);font-size:14.5px;margin-top:1px}
+.item.key .t b{color:var(--brand-ink)}
+.today-card{margin-top:24px;border:2px solid var(--brand);border-radius:10px;padding:4px 14px 2px;background:var(--surface)}
+.today-card h2{margin:12px 0 0}
+.today-card .item:last-child{border-bottom:0}
+.reset{margin-top:28px;appearance:none;background:none;border:1px solid var(--line);color:var(--ink-2);font:500 15px/1 var(--sans);padding:11px 16px;border-radius:8px;cursor:pointer}
+
+.week{list-style:none;margin:0;padding:0}
+.week li{display:grid;grid-template-columns:104px 1fr;gap:10px;padding:14px 0 14px 12px;border-bottom:1px solid var(--line);border-left:5px solid transparent}
+.week li.now{border-left-color:var(--brand);background:var(--surface)}
+.week .d{font:700 22px/1.1 var(--cond)}
+.week .d small{display:block;font:500 13.5px/1.3 var(--sans);color:var(--brand-ink)}
+.week .quiet{color:var(--ink-2)}
+.every{margin-top:26px}
+.every dl{margin:0}
+.every dt{font-weight:600;margin-top:14px}
+.every dd{margin:2px 0 0;color:var(--ink-2)}
+
+.flow{list-style:none;margin:0;padding:0;counter-reset:s}
+.flow li{position:relative;padding:0 0 26px 54px;counter-increment:s}
+.flow li::before{content:counter(s);position:absolute;left:0;top:0;width:36px;height:36px;border-radius:50%;background:var(--bar);color:var(--bar-ink);font:700 20px/36px var(--cond);text-align:center}
+.flow li::after{content:"";position:absolute;left:17px;top:40px;bottom:6px;width:2px;background:var(--line)}
+.flow li:last-child::after{display:none}
+.flow li:first-child::before{background:var(--brand);color:#fff}
+.flow .who{color:var(--brand-ink);font-size:15px;font-weight:600}
+.flow p{margin-top:2px}
+details{margin-top:8px;border-top:2px solid var(--ink);padding-top:12px}
+summary{font:700 22px/1.2 var(--cond);cursor:pointer;padding:4px 0}
+details ul{margin:8px 0 0;padding-left:20px}
+details li{margin:6px 0}
+
+.series{margin:0 0 30px;border:2px solid var(--brand);border-radius:10px;background:var(--surface);padding:12px 14px 6px}
+.series h2{margin:0 0 4px}
+.series p.sub{color:var(--ink-2);font-size:15px;margin-bottom:6px}
+.series dl{margin:0}
+.series div{display:grid;grid-template-columns:64px 1fr;gap:12px;align-items:baseline;padding:10px 0;border-top:1px solid var(--line)}
+.series dt{font:700 26px/1 var(--cond);color:var(--brand-ink)}
+.series dd{margin:0}
+.series dd small{display:block;color:var(--ink-2);font-size:14.5px}
+
+.goals{margin:0;padding:0;list-style:none}
+.goals li{display:grid;grid-template-columns:96px 1fr;gap:12px;align-items:baseline;padding:11px 0;border-bottom:1px solid var(--line)}
+.goals b{font:700 34px/1 var(--cond);color:var(--brand-ink)}
+.goals span small{display:block;color:var(--ink-2);font-size:14.5px}
+.who-list{margin:0}
+.who-list div{display:grid;grid-template-columns:1fr 1fr;gap:12px;padding:12px 0;border-bottom:1px solid var(--line)}
+.who-list dt{margin:0}
+.who-list dd{margin:0;font-weight:600}
+.who-list dd small{display:block;font-weight:400;color:var(--ink-2);font-size:14.5px}
+.sec-title{margin-top:30px}
+.sec-title:first-child{margin-top:0}
+
+.deadline{margin:10px 0 0;color:var(--ink-2)}
+.deadline.late{color:var(--alert);font-weight:600}
+.deadline.ok{color:var(--done);font-weight:600}
+.sup{margin-top:24px}
+.sup header{display:flex;justify-content:space-between;align-items:baseline;gap:10px;border-bottom:2px solid var(--ink);padding-bottom:6px;margin-bottom:10px}
+.sup h2{margin:0;font-size:22px}
+.sup h2 em{font:500 13px/1 var(--sans);font-style:normal;color:var(--ink-2);text-transform:uppercase;letter-spacing:.6px;margin-left:8px;vertical-align:3px}
+.sup h2 em.auto{color:var(--done)}
+.sup .st{font-size:15px;color:var(--ink-2);text-align:right}
+.sup .st.ok{color:var(--done);font-weight:600}
+.sup .st.go{color:var(--brand-ink);font-weight:600}
+.rines{display:grid;grid-template-columns:repeat(5,1fr);gap:8px}
+.rin{appearance:none;border:2px solid var(--line);background:var(--surface);color:var(--ink);border-radius:8px;min-height:54px;padding:6px 0;cursor:pointer;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;font:inherit}
+.rin span{font:700 23px/1 var(--cond)}
+.rin small{font:500 12px/1 var(--sans);min-height:12px}
+.rin[data-v="1"]{background:var(--btn-bg);border-color:var(--btn-bg);color:var(--btn-ink)}
+.rin[data-v="2"]{background:var(--done);border-color:var(--done);color:#fff}
+.rin:focus-visible,.all:focus-visible,.primary:focus-visible,.notes textarea:focus-visible{outline:3px solid var(--brand);outline-offset:2px}
+.all{appearance:none;background:none;border:0;color:var(--ink-2);font:500 15px/1 var(--sans);text-decoration:underline;padding:12px 0 0;cursor:pointer}
+.notes{display:block;margin-top:26px}
+.notes span{display:block;font:700 22px/1.1 var(--cond);margin-bottom:8px}
+.notes textarea{width:100%;font:400 16px/1.4 var(--sans);color:var(--ink);background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:10px 12px;resize:vertical}
+.pp-actions{display:flex;flex-wrap:wrap;gap:12px;align-items:center;margin-top:18px}
+.primary{appearance:none;background:var(--btn-bg);color:var(--btn-ink);border:0;border-radius:8px;font:600 17px/1 var(--sans);padding:15px 20px;cursor:pointer}
+.pp-actions .reset{margin-top:0}
+.day-actions{margin-top:30px}
+.pp-msg{margin-top:12px;color:var(--ink-2);font-size:15px}
+.alert{margin:20px 0 0;border-left:6px solid var(--alert);background:var(--surface);padding:10px 12px;font-weight:600}
+.solo-precios .panel:not(#p-precios),.solo-precios .tabs,.solo-precios .rule{display:none!important}
+.solo-precios #p-precios[hidden]{display:block}
+
+@media (max-width:420px){
+  body{font-size:16.5px}
+  h1{font-size:29px}
+  .week li{grid-template-columns:104px 1fr;gap:8px;padding-left:10px}
+  .week .d{font-size:21px}
+  .goals li{grid-template-columns:82px 1fr}
+  .who-list div{grid-template-columns:1fr}
+  .who-list dd{margin-top:2px}
+}
+@media (prefers-reduced-motion: reduce){.tread i{transition:none}}
+@media print{
+  body{background:#fff;color:#000;font-size:12px}
+  :root{--bg:#fff;--surface:#fff;--ink:#000;--ink-2:#444;--line:#bbb}
+  .tabs,.reset,.pp-actions,.all{display:none}
+  .panel[hidden]{display:block}
+  .panel{padding-top:14px;break-inside:avoid-page}
+  .tread{display:none}
+  .wrap{padding:0}
+  .rule{-webkit-print-color-adjust:exact;print-color-adjust:exact}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <h1>Guía rápida de administración</h1>
+    <p class="today" id="today"></p>
+  </header>
+
+  <aside class="rule" role="note">
+    <strong>WhatsApp siempre pendiente</strong>
+    Las solicitudes de factura llegan por WhatsApp y se atienden al momento, sin esperar al siguiente bloque.
+    <span class="prio"><b>Prioridad del trabajo:</b> 1. Realizar facturas. 2. Corroborar pagos. Todo lo demás va después.</span>
+  </aside>
+
+  <nav class="tabs" role="tablist" aria-label="Secciones">
+    <button class="tab" role="tab" id="t-hoy" aria-controls="p-hoy" aria-selected="true">Hoy</button>
+    <button class="tab" role="tab" id="t-semana" aria-controls="p-semana" aria-selected="false" tabindex="-1">Semana</button>
+    <button class="tab" role="tab" id="t-precios" aria-controls="p-precios" aria-selected="false" tabindex="-1">Precios</button>
+    <button class="tab" role="tab" id="t-flujo" aria-controls="p-flujo" aria-selected="false" tabindex="-1">Facturación</button>
+    <button class="tab" role="tab" id="t-metas" aria-controls="p-metas" aria-selected="false" tabindex="-1">Metas y avisos</button>
+  </nav>
+
+  <main>
+    <section class="panel" id="p-hoy" role="tabpanel" aria-labelledby="t-hoy">
+      <div class="progress">
+        <div class="count"><b id="pct">0%</b><span id="cnt" aria-live="polite"></span></div>
+        <div class="tread" id="tread" aria-hidden="true"></div>
+      </div>
+      <div id="lists"></div>
+      <label class="notes"><span>Pendientes para mañana y comentarios</span><textarea id="day-notes" rows="4" placeholder="Por ejemplo: No se aplicó el pago de X porque el depósito no se ha acreditado."></textarea></label>
+      <div class="pp-actions day-actions">
+        <button class="primary" id="day-pdf" type="button">Guardar el PDF del día</button>
+        <button class="reset" id="reset" type="button">Reiniciar el día</button>
+      </div>
+      <p class="pp-msg" id="day-msg" aria-live="polite">Al cerrar, guarda el PDF y envíaselo a Iris para que revise qué se hizo.</p>
+    </section>
+
+    <section class="panel" id="p-semana" role="tabpanel" aria-labelledby="t-semana" hidden>
+      <ol class="week" id="week"></ol>
+      <div class="every">
+        <h2>Fuera del calendario</h2>
+        <dl>
+          <dt>Todos los días por la mañana</dt>
+          <dd>Enviar el inventario revisado a todos, las cuentas por cobrar a todos y las cuentas por pagar a Luis e Iris. El seguimiento se da en los grupos de llantas.</dd>
+          <dt>Todos los días</dt>
+          <dd>Excel de seguimiento revisado, agenda de servicios de llantas programada, los 3 bancos aplicados al día y Excel de movimientos con lo pagado marcado.</dd>
+          <dt>Cada 2 meses</dt>
+          <dd>Revisar qué semáforos de unidades faltan. Administración le indica al llantero qué unidades siguen y lo acuerda con ventas. Cada semáforo que entrega el llantero se captura en nuestro software el mismo día.</dd>
+        </dl>
+      </div>
+    </section>
+
+    <section class="panel" id="p-precios" role="tabpanel" aria-labelledby="t-precios" hidden>
+      <div class="progress">
+        <div class="count"><b id="pp-pct">0%</b><span id="pp-cnt" aria-live="polite"></span></div>
+        <div class="tread" id="pp-tread" aria-hidden="true"></div>
+      </div>
+      <p class="deadline" id="pp-deadline"></p>
+      <div id="pp-list"></div>
+      <label class="notes"><span>Notas del día</span><textarea id="pp-notes" rows="3" placeholder="Por ejemplo: Jasman aún no envía la lista del rin 18."></textarea></label>
+      <div class="pp-actions">
+        <button class="primary" id="pp-pdf" type="button">Guardar el PDF del avance</button>
+        <button class="reset" id="pp-reset" type="button">Reiniciar la semana</button>
+      </div>
+      <p class="pp-msg" id="pp-msg" aria-live="polite">Las listas automáticas se cargan solas: solo hay que revisarlas. Las manuales se capturan rin por rin. Toca cada rin: una vez en curso, dos veces listo.</p>
+    </section>
+
+    <section class="panel" id="p-flujo" role="tabpanel" aria-labelledby="t-flujo" hidden>
+      <section class="series" aria-labelledby="h-series">
+        <h2 id="h-series">Serie de cada factura</h2>
+        <p class="sub">La serie la define dónde termina la llanta, no quién es el cliente. Si se instala aquí, siempre es GT.</p>
+        <dl>
+          <div><dt>GT</dt><dd>Instalación en taller<small>Llantas instaladas aquí y cualquier servicio de taller.</small></dd></div>
+          <div><dt>GV</dt><dd>Venta a domicilio o recolección<small>La llanta sale sin instalar: se entrega o el cliente pasa por ella.</small></dd></div>
+          <div><dt>AGS</dt><dd>Ventas Aguascalientes</dd></div>
+          <div><dt>CGZ</dt><dd>Ventas Ciudad Guzmán</dd></div>
+        </dl>
+      </section>
+
+      <h2>Cómo fluye</h2>
+      <ol class="flow">
+        <li><h3>Servicio</h3><span class="who">Administración y llantero</span>
+          <p>Administración llena el encabezado del Formato de Servicio y se lo da al llantero. Él lo completa y lo regresa.</p></li>
+        <li><h3>Revisión</h3><span class="who">Administración</span>
+          <p>Que estén llenos los servicios marcados y que coincidan con lo vendido.</p></li>
+        <li><h3>Factura</h3><span class="who">Administración</span>
+          <p>En CONTPAQi, al momento, con la serie correcta (GT, GV, AGS o CGZ). Validar los datos fiscales y anotar al final el N.º de factura en el formato. Si es PPD, queda «complemento pendiente».</p></li>
+        <li><h3>Pago</h3><span class="who">Tesorería y administración</span>
+          <p>Cobros y pagos tienen que estar al día. <b>Lo que nos pagan:</b> solo se aplica lo que ya es transferencia acreditada; se aplica el pago y se verifica el saldo, sin imprimir. <b>Lo que nosotros pagamos:</b> se imprime el comprobante, se une a su factura y se aplica el pago.</p></li>
+        <li><h3>Complemento y expediente</h3><span class="who">Administración</span>
+          <p><b>Lo que nos pagan:</b> si la factura fue a crédito (PPD), nosotros emitimos el complemento de pago a más tardar al día siguiente de recibir el pago.</p>
+          <p style="margin-top:6px"><b>Lo que nosotros pagamos:</b> el proveedor nos debe mandar su complemento. Si no lo ha mandado, se le solicita. En papel se archiva junto, en este orden: comprobante de pago, factura del proveedor y su complemento.</p></li>
+        <li><h3>Conciliación</h3><span class="who">Administración</span>
+          <p>Banca Mifel, BBVA y Mercado Pago aplicados al día. Al final del día se envía la conciliación para corroborar que está lista. Lo que no se identifique se avisa a ventas.</p></li>
+      </ol>
+      <details>
+        <summary>Qué revisar en el Formato de Servicio</summary>
+        <ul>
+          <li>Cliente, N.º económico, fecha, hora, kilometraje y motivo completos.</li>
+          <li>Presiones al ingresar y al salir en cada posición.</li>
+          <li>Cada servicio marcado tiene sus posiciones, y el marcaje está anotado en las llantas nuevas.</li>
+          <li>Plomos y adhesivos con cantidad; vacío significa que no se usó.</li>
+          <li>Alineación externa: proveedor anotado. Se paga de contado, se guarda el comprobante y se cobra al cliente en la factura.</li>
+          <li>Rotación con «de posición» y «a posición» en cada movimiento.</li>
+          <li>Formato incompleto: se devuelve al llantero antes de facturar.</li>
+        </ul>
+      </details>
+    </section>
+
+    <section class="panel" id="p-metas" role="tabpanel" aria-labelledby="t-metas" hidden>
+      <h2 class="sec-title">Metas del día</h2>
+      <ul class="goals">
+        <li><b>0</b><span>Facturas pendientes al cierre</span></li>
+        <li><b>100%</b><span>Solicitudes de factura atendidas al momento</span></li>
+        <li><b>100%</b><span>Facturas con la serie correcta</span></li>
+        <li><b>100%</b><span>Pagos en firme aplicados el mismo día<small>Los 3 bancos al día.</small></span></li>
+        <li><b>Lunes</b><span>Cambio de precios terminado el mismo día<small>Máximo 1 día, junto con las demás actividades.</small></span></li>
+        <li><b>1 día</b><span>Máximo para emitir el complemento después del pago</span></li>
+        <li><b>0</b><span>Llantas faltantes en el inventario<small>No hay tolerancia.</small></span></li>
+        <li><b>30 min</b><span>Máximo para responder los demás mensajes de WhatsApp</span></li>
+        <li><b>5 h</b><span>Máximo para responder un correo<small>Por confirmar.</small></span></li>
+      </ul>
+
+      <h2 class="sec-title">Si pasa esto, avisa</h2>
+      <dl class="who-list">
+        <div><dt>Depósito sin identificar</dt><dd>Ventas<small>El mismo día</small></dd></div>
+        <div><dt>No hay espacio en la agenda de servicios de llantas</dt><dd>Pedir apoyo externo<small>Al programar</small></dd></div>
+        <div><dt>Estado de cuenta de proveedor no cuadra con el sistema</dt><dd>Iris<small>El viernes</small></dd></div>
+        <div><dt>Formato de Servicio incompleto</dt><dd>Llantero<small>Antes de facturar</small></dd></div>
+        <div><dt>Datos fiscales incompletos o serie sin definir</dt><dd>Quien pidió la factura<small>Al detectarlo</small></dd></div>
+        <div><dt>Cliente pide crédito o excepción de pago</dt><dd>Luis o Iris<small>Antes de entregar o facturar</small></dd></div>
+        <div><dt>Error en una factura o cancelación</dt><dd>Iris<small>Antes de cancelar o reemitir</small></dd></div>
+        <div><dt>Falta una llanta en el inventario</dt><dd>Iris<small>El mismo día</small></dd></div>
+        <div><dt>Solicitud de servicio de llantas de TRT PLUS, ATEMPUS o DRIVE ME</dt><dd>Agendar y confirmar en el grupo de esa empresa<small>El mismo día</small></dd></div>
+        <div><dt>No puedes estar pendiente de WhatsApp</dt><dd>Iris<small>Antes de retirarte</small></dd></div>
+        <div><dt>Falla CONTPAQi</dt><dd>Iris<small>De inmediato</small></dd></div>
+      </dl>
+    </section>
+  </main>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script>
+(function(){
+  var DAYS=["domingo","lunes","martes","miércoles","jueves","viernes","sábado"];
+  var MONTHS=["enero","febrero","marzo","abril","mayo","junio","julio","agosto","septiembre","octubre","noviembre","diciembre"];
+  var STATEMENTS={
+    1:[["s1p","Cambio de precios de las listas","7 proveedores. Se termina hoy, junto con las demás actividades. El avance se anota en la pestaña Precios.",true]],
+    5:[["s5a","Solicitar estados de cuenta a proveedores y cuadrarlos con el sistema"],
+       ["s5b","Revisar físicamente el inventario","Firmado por las personas que lo revisaron. No puede faltar ninguna llanta."],
+       ["s5c","Solicitar la recolección de llantas de desecho"]],
+    6:[["s6a","Dejar el archivo contable actualizado"],["s6b","Llenar el tablero semanal de indicadores"]]
+  };
+  var now=new Date(), dow=now.getDay();
+  var sat=(dow===6);
+  var hours=sat?"9:00 a 14:00":"9:00 a 18:30";
+  var closeHour=sat?"14:00":"18:30";
+
+  document.getElementById("today").innerHTML="<b>"+DAYS[dow].charAt(0).toUpperCase()+DAYS[dow].slice(1)+" "+now.getDate()+" de "+MONTHS[now.getMonth()]+"</b> &nbsp; Horario de hoy: "+hours;
+
+  var SUPS=[
+    {n:"Jasman",a:false},{n:"Centurion",a:false},{n:"De Lago",a:false},{n:"Radial",a:false},
+    {n:"Centro Llantero Morales",a:true},{n:"Tres Siglos",a:true},{n:"Futurama",a:true}
+  ];
+  var RINES=[13,14,15,16,17,18,19,20,21,22];
+  var TOTAL=SUPS.length*RINES.length;
+  function pad(n){ return n<10?"0"+n:""+n; }
+  function fmtDate(d){ return DAYS[d.getDay()]+" "+d.getDate()+" de "+MONTHS[d.getMonth()]; }
+  function cap(t){ return t.charAt(0).toUpperCase()+t.slice(1); }
+  var mon=new Date(now.getFullYear(),now.getMonth(),now.getDate()+(dow===0?-6:1-dow));
+  var limit=new Date(mon.getFullYear(),mon.getMonth(),mon.getDate(),23,59,59);
+  var limitDay=new Date(mon.getFullYear(),mon.getMonth(),mon.getDate());
+  var pkey="centurion-precios7-"+mon.getFullYear()+pad(mon.getMonth()+1)+pad(mon.getDate());
+  var P={g:{},n:"",s:0,f:0};
+  try{ var rawP=localStorage.getItem(pkey); if(rawP){ var pj=JSON.parse(rawP); if(pj&&typeof pj==="object"){ P.g=pj.g||{}; P.n=pj.n||""; P.s=pj.s||0; P.f=pj.f||0; } } }catch(e){}
+  function psave(){ try{ localStorage.setItem(pkey,JSON.stringify(P)); }catch(e){} }
+  function pdone(){ var c=0; SUPS.forEach(function(_,i){ RINES.forEach(function(r){ if(P.g[i+"-"+r]===2) c++; }); }); return c; }
+  function supStatus(i){
+    var d=0,first1=null,firstP=null,any=false;
+    RINES.forEach(function(r){
+      var v=P.g[i+"-"+r]||0;
+      if(v===2){ d++; any=true; }
+      if(v===1&&first1===null){ first1=r; any=true; }
+      if(v!==2&&firstP===null){ firstP=r; }
+    });
+    if(d===RINES.length) return {t:"Terminado",c:"ok"};
+    if(first1!==null) return {t:"Va en el rin "+first1,c:"go"};
+    if(any) return {t:"Sigue el rin "+firstP,c:"go"};
+    return {t:"Sin iniciar",c:""};
+  }
+  var pd0=pdone();
+
+  var GROUPS=[
+    {id:"a",title:"Al abrir",items:[
+      ["a1","Abrir WhatsApp con las notificaciones activas"],
+      ["a2","Revisar solicitudes de factura pendientes",null,true],
+      ["a7","Enviar por la mañana el inventario revisado a todos","Cuentas por cobrar a todos; cuentas por pagar a Luis e Iris. El seguimiento se da en los grupos de llantas."],
+      ["a3","Revisar depósitos en firme","Solo cuenta la transferencia acreditada."],
+      ["a8","Revisar el Excel de seguimiento para ver qué está pendiente"],
+      ["a9","Revisar la agenda de servicios de llantas y programar","Si no hay espacio, se solicita apoyo externo."],
+      ["a4","Revisar el correo"],
+      ["a5","Descargar los movimientos de Tesorería y guardarlos en Drive","Banca Mifel, BBVA y Mercado Pago."]
+    ]},
+    {id:"b",title:"Durante el día",note:"Prioridad: facturas y pagos. Las facturas no esperan a un bloque: se emiten cuando llega la solicitud.",items:[
+      ["b1","Emitir cada factura en CONTPAQi al momento de la solicitud","Con su serie: GT, GV, AGS o CGZ. Registrar hora de recepción y de emisión.",true],
+      ["b10","Corroborar y aplicar los pagos de los 3 bancos","Cobros y pagos al día. Solo se imprimen los comprobantes de lo que nosotros pagamos, unidos a su factura.",true],
+      ["b6x","Llenar el Excel de movimientos y marcar lo ya pagado"],
+      ["b2","Revisar los Formatos de Servicio que regresa el llantero","Hasta 4 al día. Incompleto: se devuelve antes de facturar."],
+      ["b3","Capturar las compras"],
+      ["b5","Emitir los complementos de pago pendientes","A más tardar al día siguiente del pago."],
+      ["b11","Si faltan complementos (REP) de proveedores, solicitarlos"],
+      ["b12","Estar al tanto de las solicitudes de servicio de llantas del grupo","TRT PLUS, ATEMPUS y DRIVE ME. Se agendan en la agenda de servicios de llantas."],
+      ["b13","Capturar en nuestro software los semáforos que entrega el llantero","El mismo día que los entrega."]
+    ]},
+    {id:"c",title:"Al cerrar",note:"Hora de cierre de hoy: "+closeHour+".",items:[
+      ["c1","Cero facturas pendientes, y ninguna solicitud sin atender en WhatsApp",null,true],
+      ["c5","Los 3 bancos aplicados al día y la conciliación enviada","Se envía para corroborar que está lista."],
+      ["c2","Compras capturadas"],
+      ["c4","Correos respondidos"],
+      ["c7","Guardar el PDF del día y enviárselo a Iris","Botón al final de la pestaña Hoy. Los lunes incluye el avance de precios."],
+      ["c6","Escritorio ordenado y pendientes anotados"]
+    ]}
+  ];
+
+  var CHECK='<svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3 8.5l3.2 3.2L13 4.5"/></svg>';
+  var key="centurion-guia-"+now.getFullYear()+"-"+(now.getMonth()+1)+"-"+now.getDate();
+  var state={};
+  try{ state=JSON.parse(localStorage.getItem(key)||"{}")||{}; }catch(e){ state={}; }
+  function save(){ try{ localStorage.setItem(key,JSON.stringify(state)); }catch(e){} }
+
+  var lists=document.getElementById("lists");
+  function itemHTML(it){
+    var id=it[0], hint=it[2], keyItem=it[3];
+    return '<label class="item'+(keyItem?' key':'')+'"><input type="checkbox" data-id="'+id+'"'+(state[id]?' checked':'')+'>'
+      +'<span class="box">'+CHECK+'</span><span class="t">'+(keyItem?'<b>'+it[1]+'</b>':it[1])
+      +(hint?'<span class="hint">'+hint+'</span>':'')+'</span></label>';
+  }
+  var html="";
+  if(dow>=2&&dow<=6&&pd0<TOTAL){
+    html+='<p class="alert" role="alert">El cambio de precios sigue sin terminar: debía quedar listo el lunes. Faltan '+(TOTAL-pd0)+' rines.</p>';
+  }
+  if(STATEMENTS[dow]){
+    html+='<div class="today-card"><h2>Hoy además toca</h2>'+STATEMENTS[dow].map(itemHTML).join("")+'</div>';
+  }
+  GROUPS.forEach(function(g){
+    html+='<section class="group" data-g="'+g.id+'"><header><h2>'+g.title+'</h2><small class="gc"></small></header>'
+      +(g.note?'<p class="note">'+g.note+'</p>':'')+g.items.map(itemHTML).join("")+'</section>';
+  });
+  if(dow===0){ html='<p class="note">Hoy no hay operación. Esta lista se reinicia cada día.</p>'+html; }
+  lists.innerHTML=html;
+
+  var tread=document.getElementById("tread"), N=24;
+  for(var i=0;i<N;i++){ tread.appendChild(document.createElement("i")); }
+  var blocks=tread.children;
+
+  function refresh(){
+    var boxes=lists.querySelectorAll("input[type=checkbox]");
+    var done=0; boxes.forEach(function(b){ if(b.checked) done++; });
+    var total=boxes.length, pct=total?Math.round(done*100/total):0;
+    document.getElementById("pct").textContent=pct+"%";
+    document.getElementById("cnt").textContent=done+" de "+total+" listas";
+    var on=Math.round(N*done/total);
+    for(var i=0;i<N;i++){ blocks[i].className=(i<on)?"on":""; }
+    tread.className="tread"+(done===total?" full":"");
+    lists.querySelectorAll(".group").forEach(function(g){
+      var bs=g.querySelectorAll("input[type=checkbox]"), d=0; bs.forEach(function(b){ if(b.checked) d++; });
+      g.querySelector(".gc").textContent=d+" de "+bs.length;
+    });
+  }
+  lists.addEventListener("change",function(e){
+    var t=e.target; if(!t.dataset||!t.dataset.id) return;
+    if(t.checked) state[t.dataset.id]=Date.now(); else delete state[t.dataset.id];
+    save(); refresh();
+  });
+  var dayNotes=document.getElementById("day-notes");
+  dayNotes.value=state._n||"";
+  dayNotes.addEventListener("input",function(){ state._n=dayNotes.value; save(); });
+  document.getElementById("reset").addEventListener("click",function(){
+    state={}; save(); dayNotes.value="";
+    lists.querySelectorAll("input[type=checkbox]").forEach(function(b){ b.checked=false; });
+    refresh();
+  });
+  refresh();
+
+  var WEEK=[
+    [1,"Lunes","Cambio de precios de las 7 listas: se termina hoy, junto con todas las actividades del día."],
+    [2,"Martes","Sin tarea fija: pendientes, mejoras y capacitación.",1],
+    [3,"Miércoles","Sin tarea fija: pendientes, mejoras y capacitación.",1],
+    [4,"Jueves","Sin tarea fija: pendientes, mejoras y capacitación.",1],
+    [5,"Viernes","Estados de cuenta de proveedores cuadrados con el sistema. Inventario físico firmado por quienes lo revisaron. Solicitar recolección de desecho."],
+    [6,"Sábado","Archivo contable actualizado y tablero semanal. Medio día, de 9:00 a 14:00."]
+  ];
+  var wk=document.getElementById("week");
+  WEEK.forEach(function(w){
+    var li=document.createElement("li");
+    if(w[0]===dow) li.className="now";
+    li.innerHTML='<div class="d">'+w[1]+(w[0]===dow?'<small>Hoy</small>':'')+'</div><div'+(w[3]?' class="quiet"':'')+'>'+w[2]+'</div>';
+    wk.appendChild(li);
+  });
+
+  var ppList=document.getElementById("pp-list"), ppTread=document.getElementById("pp-tread");
+  for(var kk=0;kk<24;kk++){ ppTread.appendChild(document.createElement("i")); }
+  var ppMsg=document.getElementById("pp-msg"), ppNotes=document.getElementById("pp-notes");
+  ppNotes.value=P.n;
+  function ppRender(focus){
+    var h="";
+    SUPS.forEach(function(s,i){
+      var st=supStatus(i);
+      h+='<section class="sup"><header><h2>'+s.n+'<em class="'+(s.a?'auto':'')+'">'+(s.a?'Automático':'Manual')+'</em></h2><span class="st '+st.c+'">'+st.t+'</span></header><div class="rines">';
+      RINES.forEach(function(r){
+        var v=P.g[i+"-"+r]||0, lab=v===2?"listo":(v===1?"en curso":"pendiente");
+        h+='<button type="button" class="rin" data-i="'+i+'" data-r="'+r+'" data-v="'+v+'" aria-label="'+s.n+', rin '+r+': '+lab+'"><span>'+r+'</span><small>'+(v===2?"listo":(v===1?"en curso":""))+'</small></button>';
+      });
+      h+='</div><button type="button" class="all" data-all="'+i+'">'+(st.c==="ok"?"Quitar las marcas":"Marcar todo listo")+'</button></section>';
+    });
+    ppList.innerHTML=h;
+    var d=pdone(), pct=Math.round(d*100/TOTAL);
+    document.getElementById("pp-pct").textContent=pct+"%";
+    document.getElementById("pp-cnt").textContent=d+" de "+TOTAL+" rines listos";
+    var on=Math.round(24*d/TOTAL), bl=ppTread.children;
+    for(var q=0;q<24;q++){ bl[q].className=(q<on)?"on":""; }
+    ppTread.className="tread"+(d===TOTAL?" full":"");
+    var dl=document.getElementById("pp-deadline");
+    if(P.f){ dl.className="deadline ok"; dl.textContent="Terminado el "+fmtDate(new Date(P.f))+"."; }
+    else if(new Date()>limit){ dl.className="deadline late"; dl.textContent="Vencido: debía quedar listo el "+fmtDate(limitDay)+". Faltan "+(TOTAL-d)+" rines."; }
+    else { dl.className="deadline"; dl.textContent="Límite: "+fmtDate(limitDay)+". Máximo 1 día, junto con las demás actividades."; }
+    if(focus){ var el=ppList.querySelector('[data-i="'+focus[0]+'"][data-r="'+focus[1]+'"]'); if(el) el.focus(); }
+  }
+  function ppTouch(){
+    if(!P.s) P.s=Date.now();
+    if(pdone()===TOTAL){ if(!P.f) P.f=Date.now(); } else { P.f=0; }
+    psave();
+  }
+  ppList.addEventListener("click",function(e){
+    var b=e.target.closest?e.target.closest("button"):null; if(!b) return;
+    if(b.dataset.all!==undefined){
+      var i=+b.dataset.all;
+      var all=RINES.every(function(r){ return P.g[i+"-"+r]===2; });
+      RINES.forEach(function(r){ if(all) delete P.g[i+"-"+r]; else P.g[i+"-"+r]=2; });
+      ppTouch(); ppRender(); return;
+    }
+    if(b.dataset.r!==undefined){
+      var key=b.dataset.i+"-"+b.dataset.r, v=((P.g[key]||0)+1)%3;
+      if(v===0) delete P.g[key]; else P.g[key]=v;
+      ppTouch(); ppRender([b.dataset.i,b.dataset.r]);
+    }
+  });
+  ppNotes.addEventListener("input",function(){ P.n=ppNotes.value; psave(); });
+  var resetBtn=document.getElementById("pp-reset"), resetArmed=false, resetTimer=null;
+  resetBtn.addEventListener("click",function(){
+    if(!resetArmed){
+      resetArmed=true; resetBtn.textContent="Toca otra vez para confirmar";
+      resetTimer=setTimeout(function(){ resetArmed=false; resetBtn.textContent="Reiniciar la semana"; },4000);
+      return;
+    }
+    clearTimeout(resetTimer); resetArmed=false; resetBtn.textContent="Reiniciar la semana";
+    P={g:{},n:"",s:0,f:0}; ppNotes.value=""; psave(); ppRender();
+  });
+  ppRender();
+
+  function buildPDF(o,docIn){
+    var J=window.jspdf&&window.jspdf.jsPDF; if(!J&&!docIn) return null;
+    o=o||{};
+    var t=new Date(), doc=docIn||new J({unit:"pt",format:"letter"}), W=612, M=36, CWd=W-2*M;
+    var d=pdone(), pct=Math.round(d*100/TOTAL);
+    var GREEN=[31,138,91], ORG=[232,89,12], DARK=[30,34,39], GRAY=[91,99,107];
+    doc.setFillColor(DARK[0],DARK[1],DARK[2]); doc.rect(0,0,W,86,"F");
+    doc.setFillColor(ORG[0],ORG[1],ORG[2]); doc.rect(0,86,W,4,"F");
+    doc.setFont("helvetica","bold"); doc.setFontSize(10); doc.setTextColor(255,138,61); doc.text("Centurion Llantas",M,32);
+    doc.setFontSize(23); doc.setTextColor(255,255,255); doc.text("Avance del cambio de precios",M,62);
+    doc.setFont("helvetica","normal"); doc.setFontSize(10); doc.setTextColor(210,214,218);
+    doc.text(cap(fmtDate(t))+", "+pad(t.getHours())+":"+pad(t.getMinutes()),W-M,32,{align:"right"});
+    doc.text("Reporte de Administración",W-M,50,{align:"right"});
+
+    doc.setFont("helvetica","bold"); doc.setFontSize(13); doc.setTextColor(DARK[0],DARK[1],DARK[2]);
+    doc.text("Semana del "+fmtDate(mon),M,122);
+    var status, col;
+    if(P.f){ status="Terminado el "+fmtDate(new Date(P.f)); col=GREEN; }
+    else if(t>limit){ status="Vencido: debía quedar listo el "+fmtDate(limitDay); col=[179,38,30]; }
+    else { status="En tiempo. Límite: "+fmtDate(limitDay); col=GRAY; }
+    doc.setFontSize(11); doc.setTextColor(col[0],col[1],col[2]); doc.text(status,M,140);
+
+    doc.setFontSize(44); doc.setTextColor(DARK[0],DARK[1],DARK[2]); doc.text(pct+"%",M,190);
+    doc.setFontSize(13); doc.text(d+" de "+TOTAL+" rines listos",M+112,172);
+    doc.setFont("helvetica","normal"); doc.setFontSize(10.5); doc.setTextColor(GRAY[0],GRAY[1],GRAY[2]);
+    doc.text(SUPS.length+" proveedores, rines 13 a 22",M+112,188);
+    doc.setFillColor(226,229,232); doc.roundedRect(M,202,CWd,11,3,3,"F");
+    if(d>0){ var fc=(d===TOTAL)?GREEN:ORG; doc.setFillColor(fc[0],fc[1],fc[2]); doc.roundedRect(M,202,Math.max(8,CWd*d/TOTAL),11,3,3,"F"); }
+
+    var y0=230, nameW=134, cellW=29, estW=CWd-nameW-cellW*RINES.length, rowH=40, headH=26;
+    doc.setFillColor(DARK[0],DARK[1],DARK[2]); doc.rect(M,y0,CWd,headH,"F");
+    doc.setFont("helvetica","bold"); doc.setFontSize(10); doc.setTextColor(255,255,255);
+    doc.text("Proveedor",M+8,y0+17);
+    RINES.forEach(function(r,j){ doc.text(""+r,M+nameW+j*cellW+cellW/2,y0+17,{align:"center"}); });
+    doc.text("Estado",M+nameW+cellW*RINES.length+8,y0+17);
+    SUPS.forEach(function(s,i){
+      var y=y0+headH+i*rowH;
+      if(i%2===1){ doc.setFillColor(247,248,249); doc.rect(M,y,CWd,rowH,"F"); }
+      doc.setFont("helvetica","bold"); doc.setFontSize(10.5); doc.setTextColor(DARK[0],DARK[1],DARK[2]);
+      var nl=doc.splitTextToSize(s.n,nameW-14);
+      var lines=nl.length+1, ty=y+(rowH-lines*12)/2+9;
+      nl.forEach(function(line,k){ doc.text(line,M+8,ty+k*12); });
+      doc.setFont("helvetica","normal"); doc.setFontSize(8.5);
+      if(s.a) doc.setTextColor(GREEN[0],GREEN[1],GREEN[2]); else doc.setTextColor(GRAY[0],GRAY[1],GRAY[2]);
+      doc.text(s.a?"Automático":"Manual",M+8,ty+nl.length*12);
+      RINES.forEach(function(r,j){
+        var v=P.g[i+"-"+r]||0, cx=M+nameW+j*cellW;
+        if(v===2) doc.setFillColor(GREEN[0],GREEN[1],GREEN[2]);
+        else if(v===1) doc.setFillColor(ORG[0],ORG[1],ORG[2]);
+        else doc.setFillColor(230,233,236);
+        doc.roundedRect(cx+2,y+7,cellW-4,rowH-14,3,3,"F");
+        if(v===2){
+          doc.setDrawColor(255,255,255); doc.setLineWidth(2.4);
+          doc.line(cx+8.5,y+20,cx+13,y+24.5); doc.line(cx+13,y+24.5,cx+21,y+15);
+        } else if(v===1){
+          doc.setFillColor(255,255,255); doc.circle(cx+cellW/2,y+rowH/2,3.6,"F");
+        }
+      });
+      var st=supStatus(i), sc=st.c==="ok"?GREEN:(st.c==="go"?[184,66,10]:GRAY);
+      doc.setFont("helvetica","bold"); doc.setFontSize(10); doc.setTextColor(sc[0],sc[1],sc[2]);
+      var sl=doc.splitTextToSize(st.t,estW-14);
+      sl.forEach(function(line,k){ doc.text(line,M+nameW+cellW*RINES.length+8,y+(rowH-sl.length*12)/2+9+k*12); });
+      doc.setDrawColor(221,224,227); doc.setLineWidth(0.6); doc.line(M,y+rowH,M+CWd,y+rowH);
+    });
+
+    var yl=y0+headH+SUPS.length*rowH+22;
+    var leg=[["Listo",GREEN],["En curso",ORG],["Pendiente",[230,233,236]]], lx=M;
+    doc.setFont("helvetica","normal"); doc.setFontSize(10); doc.setTextColor(GRAY[0],GRAY[1],GRAY[2]);
+    leg.forEach(function(it){
+      doc.setFillColor(it[1][0],it[1][1],it[1][2]); doc.roundedRect(lx,yl-9,12,12,2,2,"F");
+      doc.text(it[0],lx+18,yl+1); lx+=18+doc.getTextWidth(it[0])+22;
+    });
+
+    var yn=yl+32;
+    doc.setFont("helvetica","bold"); doc.setFontSize(12); doc.setTextColor(DARK[0],DARK[1],DARK[2]); doc.text("Notas",M,yn);
+    doc.setDrawColor(200,204,208); doc.setLineWidth(0.8); doc.roundedRect(M,yn+8,CWd,92,4,4,"S");
+    doc.setFont("helvetica","normal"); doc.setFontSize(10.5);
+    if(P.n&&P.n.trim()){
+      doc.setTextColor(DARK[0],DARK[1],DARK[2]);
+      doc.splitTextToSize(P.n.trim(),CWd-24).slice(0,5).forEach(function(line,k){ doc.text(line,M+12,yn+28+k*14); });
+    } else { doc.setTextColor(GRAY[0],GRAY[1],GRAY[2]); doc.text("Sin notas.",M+12,yn+28); }
+
+    doc.setDrawColor(221,224,227); doc.setLineWidth(0.6); doc.line(M,752,W-M,752);
+    doc.setFontSize(9); doc.setTextColor(GRAY[0],GRAY[1],GRAY[2]);
+    doc.text("Guardado el "+fmtDate(t)+" a las "+pad(t.getHours())+":"+pad(t.getMinutes())+". Fuente: pestaña Precios de la guía de Administración.",M,766);
+    return doc;
+  }
+
+  function pricesOpen(){ return dow===1||pdone()<TOTAL; }
+  function buildDayPDF(){
+    var J=window.jspdf&&window.jspdf.jsPDF; if(!J) return null;
+    var t=new Date(), doc=new J({unit:"pt",format:"letter"}), W=612, M=36, CWd=W-2*M;
+    var secs=[];
+    if(STATEMENTS[dow]) secs.push({title:"Hoy además toca",items:STATEMENTS[dow]});
+    GROUPS.forEach(function(g){ secs.push({title:g.title,items:g.items}); });
+    var total=0, done=0;
+    secs.forEach(function(sc){ sc.items.forEach(function(it){ total++; if(state[it[0]]) done++; }); });
+    var pct=total?Math.round(done*100/total):0, pend=total-done;
+
+    doc.setFillColor(30,34,39); doc.rect(0,0,W,86,"F");
+    doc.setFillColor(232,89,12); doc.rect(0,86,W,4,"F");
+    doc.setFont("helvetica","bold"); doc.setFontSize(10); doc.setTextColor(255,138,61); doc.text("Centurion Llantas",M,32);
+    doc.setFontSize(23); doc.setTextColor(255,255,255); doc.text("Resumen del día de Administración",M,62);
+    doc.setFont("helvetica","normal"); doc.setFontSize(10); doc.setTextColor(210,214,218);
+    doc.text(cap(fmtDate(now)),W-M,32,{align:"right"});
+    doc.text("Horario de hoy: "+hours,W-M,50,{align:"right"});
+    doc.text("Guardado a las "+pad(t.getHours())+":"+pad(t.getMinutes()),W-M,66,{align:"right"});
+
+    doc.setFont("helvetica","bold"); doc.setFontSize(44); doc.setTextColor(30,34,39); doc.text(pct+"%",M,152);
+    doc.setFontSize(13); doc.text(done+" de "+total+" tareas listas",M+112,134);
+    doc.setFont("helvetica",pend?"bold":"normal"); doc.setFontSize(11);
+    if(pend){ doc.setTextColor(184,66,10); doc.text("Pendientes: "+pend,M+112,151); }
+    else { doc.setTextColor(31,138,91); doc.text("Todo el día quedó completo.",M+112,151); }
+    doc.setFillColor(226,229,232); doc.roundedRect(M,166,CWd,11,3,3,"F");
+    if(done>0){
+      if(pend===0) doc.setFillColor(31,138,91); else doc.setFillColor(232,89,12);
+      doc.roundedRect(M,166,Math.max(8,CWd*done/total),11,3,3,"F");
+    }
+
+    var y=204;
+    function newPage(){
+      doc.addPage(); doc.setFillColor(30,34,39); doc.rect(0,0,W,34,"F");
+      doc.setFont("helvetica","bold"); doc.setFontSize(11); doc.setTextColor(255,255,255);
+      doc.text("Resumen del día de Administración, continuación",M,22); y=60;
+    }
+    secs.forEach(function(sc){
+      var d=0; sc.items.forEach(function(it){ if(state[it[0]]) d++; });
+      if(y>690) newPage();
+      doc.setFont("helvetica","bold"); doc.setFontSize(12); doc.setTextColor(30,34,39); doc.text(sc.title,M,y);
+      doc.setFont("helvetica","normal"); doc.setFontSize(10); doc.setTextColor(91,99,107); doc.text(d+" de "+sc.items.length,W-M,y,{align:"right"});
+      doc.setDrawColor(30,34,39); doc.setLineWidth(1.2); doc.line(M,y+5,W-M,y+5); y+=19;
+      sc.items.forEach(function(it){
+        var v=state[it[0]], ok=!!v;
+        doc.setFont("helvetica",ok?"normal":"bold"); doc.setFontSize(10);
+        var lines=doc.splitTextToSize(it[1],CWd-96), h=Math.max(16.5,lines.length*12+4.5);
+        if(y+h>748) newPage();
+        if(ok){
+          doc.setFillColor(31,138,91); doc.roundedRect(M,y-9,12,12,2,2,"F");
+          doc.setDrawColor(255,255,255); doc.setLineWidth(1.6);
+          doc.line(M+2.6,y-3,M+5,y-0.6); doc.line(M+5,y-0.6,M+9.6,y-6.4);
+        } else {
+          doc.setDrawColor(150,156,162); doc.setLineWidth(1); doc.roundedRect(M,y-9,12,12,2,2,"S");
+        }
+        doc.setTextColor(30,34,39);
+        doc.setFont("helvetica",ok?"normal":"bold"); doc.setFontSize(10);
+        lines.forEach(function(l,k){ doc.text(l,M+22,y+k*12); });
+        doc.setFontSize(9.5);
+        if(ok){
+          if(typeof v==="number"&&v>1e12){ var tm=new Date(v); doc.setFont("helvetica","normal"); doc.setTextColor(91,99,107); doc.text(pad(tm.getHours())+":"+pad(tm.getMinutes()),W-M,y,{align:"right"}); }
+        } else { doc.setFont("helvetica","bold"); doc.setTextColor(184,66,10); doc.text("Pendiente",W-M,y,{align:"right"}); }
+        doc.setDrawColor(228,231,234); doc.setLineWidth(0.5); doc.line(M,y+h-11,W-M,y+h-11);
+        y+=h;
+      });
+      y+=8;
+    });
+    var nt=(state._n||"").trim();
+    doc.setFont("helvetica","normal"); doc.setFontSize(10.5);
+    var nlines=nt?doc.splitTextToSize(nt,CWd-24):["Sin comentarios."];
+    var boxH=Math.max(40,nlines.length*14+20);
+    if(y+30+boxH>748) newPage();
+    doc.setFont("helvetica","bold"); doc.setFontSize(12); doc.setTextColor(30,34,39); doc.text("Pendientes para mañana y comentarios",M,y+6);
+    doc.setDrawColor(30,34,39); doc.setLineWidth(1.2); doc.line(M,y+11,W-M,y+11);
+    var ny=y+30;
+    doc.setFont("helvetica","normal"); doc.setFontSize(10.5);
+    if(nt) doc.setTextColor(30,34,39); else doc.setTextColor(91,99,107);
+    nlines.forEach(function(l){ if(ny>748){ newPage(); ny=y; } doc.text(l,M,ny); ny+=14; });
+    if(pricesOpen()){ doc.addPage(); buildPDF({},doc); }
+    var n=doc.getNumberOfPages();
+    for(var pg=1;pg<=n;pg++){
+      doc.setPage(pg); doc.setFont("helvetica","normal"); doc.setFontSize(8.5); doc.setTextColor(120,126,132);
+      doc.text("Página "+pg+" de "+n,W-M,784,{align:"right"});
+    }
+    return doc;
+  }
+
+  function printFallback(msgEl,solo){
+    msgEl.textContent="Se abrirá la impresión: elige «Guardar como PDF».";
+    if(solo) document.body.classList.add("solo-precios");
+    try{ window.print(); }catch(e){}
+    setTimeout(function(){ document.body.classList.remove("solo-precios"); },600);
+  }
+  function savePdf(doc,fname,msgEl,solo){
+    if(!doc){ printFallback(msgEl,solo); return; }
+    var buf=doc.output("arraybuffer");
+    var getDl=(window.claude&&typeof window.claude.use==="function")?window.claude.use("downloads"):Promise.resolve(null);
+    getDl.then(function(dl){
+      if(dl){ return dl.save({filename:fname,data:buf}).then(function(){ msgEl.textContent="PDF guardado. Envíaselo a Iris."; }); }
+      doc.save(fname); msgEl.textContent="PDF generado. Envíaselo a Iris.";
+    }).catch(function(err){
+      if(err&&err.code==="declined"){ msgEl.textContent="No se guardó el PDF."; return; }
+      printFallback(msgEl,solo);
+    });
+  }
+  function ymd(t){ return t.getFullYear()+"-"+pad(t.getMonth()+1)+"-"+pad(t.getDate()); }
+  document.getElementById("pp-pdf").addEventListener("click",function(){ savePdf(buildPDF(),"Avance-precios-"+ymd(new Date())+".pdf",ppMsg,true); });
+  var dayMsg=document.getElementById("day-msg");
+  document.getElementById("day-pdf").addEventListener("click",function(){
+    var c7=lists.querySelector('input[data-id="c7"]');
+    if(c7&&!c7.checked){ c7.checked=true; state.c7=Date.now(); save(); refresh(); }
+    savePdf(buildDayPDF(),"Resumen-dia-"+ymd(new Date())+".pdf",dayMsg,false); });
+
+  var tabs=Array.prototype.slice.call(document.querySelectorAll(".tab"));
+  function show(tab){
+    tabs.forEach(function(t){
+      var on=(t===tab);
+      t.setAttribute("aria-selected",on?"true":"false");
+      t.tabIndex=on?0:-1;
+      document.getElementById(t.getAttribute("aria-controls")).hidden=!on;
+    });
+    window.scrollTo(0,0);
+  }
+  tabs.forEach(function(t,i){
+    t.addEventListener("click",function(){ show(t); });
+    t.addEventListener("keydown",function(e){
+      var n=null;
+      if(e.key==="ArrowRight") n=tabs[(i+1)%tabs.length];
+      if(e.key==="ArrowLeft") n=tabs[(i-1+tabs.length)%tabs.length];
+      if(n){ e.preventDefault(); n.focus(); show(n); }
+    });
+  });
+})();
+</script>
+</body>
+</html>
+
+</body></html>
